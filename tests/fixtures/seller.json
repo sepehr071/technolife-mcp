@@ -1,0 +1,59 @@
+{
+ "data": {
+  "get_seller_product_list": {
+   "results": [
+    {
+     "name": "لپ تاپ لنوو 15.6 اینچی مدل IdeaPad Slim 3 i3 1315U 8GB 512GB",
+     "code": "TLP-60492",
+     "normal_price": 125000000,
+     "discount": null,
+     "discounted_price": null,
+     "deadline": null,
+     "score_count": 45,
+     "score_avg": 4.177777777777778,
+     "available": 3000,
+     "marketing_group": null
+    },
+    {
+     "name": "لپ تاپ لنوو 15.3 اینچی مدل IdeaPad Slim 3 i5 13420H 16GB 512GB",
+     "code": "TLP-133524",
+     "normal_price": 176800000,
+     "discount": null,
+     "discounted_price": 149999000,
+     "deadline": "1790067638779",
+     "score_count": 35,
+     "score_avg": 3.914285714285714,
+     "available": 3000,
+     "marketing_group": "تکنوآف"
+    },
+    {
+     "name": "لپ تاپ لنوو 15.6 اینچی مدل V15 G4 i5 13420H 16GB 512GB SSD",
+     "code": "TLP-49420",
+     "normal_price": 165000000,
+     "discount": null,
+     "discounted_price": null,
+     "deadline": null,
+     "score_count": 36,
+     "score_avg": 4.083333333333333,
+     "available": 3000,
+     "marketing_group": null
+    }
+   ],
+   "sellers_info": {
+    "code": "TLS-15172",
+    "fa_name": "ایران پشتیبان",
+    "en_name": "IRANPOSHTIBAN",
+    "score": 5,
+    "on_schedule": 99.3,
+    "faultless": 99.5,
+    "supply": 99.7,
+    "joined_duration": {
+     "years": 1,
+     "months": 5,
+     "days": 16
+    }
+   },
+   "count": 410
+  }
+ }
+}

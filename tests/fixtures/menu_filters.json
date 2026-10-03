@@ -1,0 +1,79 @@
+{
+ "data": {
+  "get_menu_filters": {
+   "page_filters": [
+    {
+     "title": "فیلتر براساس قیمت",
+     "price_range": {
+      "min": 0,
+      "max": 1355740000
+     },
+     "items": null
+    },
+    {
+     "title": "برندها",
+     "price_range": null,
+     "items": [
+      {
+       "name": "شیائومی",
+       "code": "15",
+       "enName": "Xiaomi"
+      },
+      {
+       "name": "لنوو",
+       "code": "16",
+       "enName": "Lenovo"
+      },
+      {
+       "name": "ایسوس",
+       "code": "19",
+       "enName": "ASUS"
+      },
+      {
+       "name": "اپل",
+       "code": "20",
+       "enName": "Apple"
+      }
+     ]
+    },
+    {
+     "title": "ظرفیت حافظه RAM",
+     "price_range": null,
+     "items": [
+      {
+       "name": "تا 2 گیگابایت",
+       "code": "4439",
+       "enName": null
+      },
+      {
+       "name": "2 گیگابایت",
+       "code": "4440",
+       "enName": null
+      },
+      {
+       "name": "3 گیگابایت",
+       "code": "4441",
+       "enName": null
+      }
+     ]
+    },
+    {
+     "title": "رنگ ها",
+     "price_range": null,
+     "items": [
+      {
+       "name": "صورتی",
+       "code": "#e05ce0",
+       "enName": null
+      },
+      {
+       "name": "طوسی",
+       "code": "#c4c7ce",
+       "enName": null
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

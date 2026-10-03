@@ -1,0 +1,48 @@
+{
+ "address": "ضلع شرقی م. ونک",
+ "subdivision_prefix": "تهران",
+ "subdiv_prefixed_address": "استان تهران,شهر تهران,ضلع شرقی م. ونک",
+ "local_address": "ضلع شرقی م. ونک",
+ "approximate_address": "ضلع شرقی م. ونک",
+ "geofences": [
+  {
+   "id": 0,
+   "title": "در این نقطه محدوده ای ثبت نشده است",
+   "type": "9121"
+  },
+  {
+   "id": 43100100000507,
+   "title": "گاندی",
+   "type": "9101"
+  }
+ ],
+ "subdivisions": {
+  "ostan": {
+   "id": 1001,
+   "title": "تهران",
+   "code": "23",
+   "type": "ostan"
+  },
+  "shahrestan": {
+   "id": 100101,
+   "title": "تهران",
+   "code": "2301",
+   "type": "shahrestan"
+  },
+  "bakhsh": {
+   "id": 10410151,
+   "title": "مرکزی",
+   "code": "230102",
+   "type": "bakhsh"
+  },
+  "shahr": {
+   "id": 10511133,
+   "title": "تهران",
+   "code": "2301021576",
+   "type": "shahr"
+  }
+ },
+ "plate": "0",
+ "certainty": 84,
+ "status": "OK"
+}

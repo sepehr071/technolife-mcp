@@ -1,0 +1,72 @@
+{
+ "data": {
+  "get_compare_page": {
+   "category": {
+    "name": "لپ تاپ",
+    "code": "TLC-19"
+   },
+   "products": [
+    {
+     "name": "لپ تاپ لنوو 15.6 اینچی مدل IdeaPad Slim 3 i3 1315U 8GB 512GB",
+     "code": "TLP-60492",
+     "score_avg": 4.177777777777778,
+     "score_count": 45,
+     "normal_price": 125000000,
+     "discounted_price": 125000000,
+     "discount": null,
+     "available": 4
+    },
+    {
+     "name": "لپ تاپ لنوو 15.3 اینچی مدل IdeaPad Slim 3 i5 13420H 16GB 512GB",
+     "code": "TLP-133524",
+     "score_avg": 3.914285714285714,
+     "score_count": 35,
+     "normal_price": 176800000,
+     "discounted_price": 176800000,
+     "discount": null,
+     "available": 5
+    }
+   ],
+   "config_table": [
+    {
+     "title": "مشخصات کلی",
+     "items": [
+      {
+       "name": "سری لپ تاپ",
+       "values": [
+        "Ideapad Slim 3",
+        "Ideapad Slim 3"
+       ]
+      },
+      {
+       "name": "نوع کاربری",
+       "values": [
+        "عمومی/ مالتی مدیا",
+        "حرفه ای، طراحی، مالتی مدیا"
+       ]
+      }
+     ]
+    },
+    {
+     "title": "مشخصات فیزیکی",
+     "items": [
+      {
+       "name": "ابعاد",
+       "values": [
+        "359.3x235x17.9 میلی متر\n",
+        "343.4x239.5x17.9 میلی متر "
+       ]
+      },
+      {
+       "name": "وزن",
+       "values": [
+        "1.6 کیلوگرم\n",
+        "--"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

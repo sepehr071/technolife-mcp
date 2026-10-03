@@ -1,0 +1,206 @@
+{
+ "data": {
+  "get_landing_page": [
+   {
+    "type": "SlideBanner",
+    "componentConfig": null,
+    "banners": [
+     {
+      "link": "https://www.technolife.com/landings/payday-technolife",
+      "title": "خرید سرماه",
+      "alt": null
+     },
+     {
+      "link": "https://technopay.ir/",
+      "title": "تکنوپی مهر",
+      "alt": null
+     },
+     {
+      "link": "https://www.technolife.com/landings/mobiledprice",
+      "title": "خرید سرماه موبایل",
+      "alt": null
+     },
+     {
+      "link": "https://www.technolife.com/landings/laptopfordemand",
+      "title": "لپ تاپ",
+      "alt": null
+     },
+     {
+      "link": "https://www.technolife.com/landings/HomeElectronic",
+      "title": "خرید سر ماه لوازم خانگی",
+      "alt": null
+     }
+    ],
+    "product_tabs": []
+   },
+   {
+    "type": "ProductTechnoOffBanner",
+    "componentConfig": null,
+    "banners": [
+     {
+      "link": null,
+      "title": null,
+      "alt": null
+     }
+    ],
+    "product_tabs": [
+     {
+      "TabTitle": null,
+      "TabContent": [
+       {
+        "name": "گوشی موبایل سامسونگ مدل Galaxy A17 4G ظرفیت 128 گیگابایت رم 6 گیگابایت - ویتنام",
+        "code": "TLP-167567",
+        "normal_price": 68000000,
+        "discount": "2%",
+        "discounted_price": 66700000,
+        "marketing_group": "تکنوآف",
+        "available": 144,
+        "deadline": "1792668900000"
+       },
+       {
+        "name": "گوشی موبايل سامسونگ گلکسی A55 5G ظرفیت 256 گیگابایت رم 8 گیگابایت - ویتنام",
+        "code": "TLP-31023",
+        "normal_price": 108000000,
+        "discount": "1%",
+        "discounted_price": 106990000,
+        "marketing_group": "تکنوآف",
+        "available": 5,
+        "deadline": "1792666440000"
+       },
+       {
+        "name": "گوشی موبایل اپل مد‌ل iPhone 17 CH/A ظرفیت 256 گیگابایت رم 8 گیگابایت - Not Active رجیستر شده به همراه شارژر دیواری اپل 20 وات مدل 3 پین B/A - اورجینال",
+        "code": "TLP-586168",
+        "normal_price": 369999000,
+        "discount": "3%",
+        "discounted_price": 359999000,
+        "marketing_group": "تکنوآف",
+        "available": 1,
+        "deadline": "1792664640000"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "type": "SpecialEventCarousel",
+    "componentConfig": {
+     "title": "تکنو تایم"
+    },
+    "banners": [],
+    "product_tabs": [
+     {
+      "TabTitle": "کروسل کمپین",
+      "TabContent": [
+       {
+        "name": "آب میوه گیر روسو مدل چهار کاره",
+        "code": "TLP-175987",
+        "normal_price": 22300000,
+        "discount": "35%",
+        "discounted_price": 14495000,
+        "marketing_group": "تکنو تایم",
+        "available": 3,
+        "deadline": "1791023419127"
+       },
+       {
+        "name": "چراغ اضطراری شارژی مدل ny-9808B",
+        "code": "TLP-511242",
+        "normal_price": 1800000,
+        "discount": "6%",
+        "discounted_price": 1700000,
+        "marketing_group": "تکنو تایم",
+        "available": 3,
+        "deadline": "1791023419127"
+       },
+       {
+        "name": "کابل HDMI بنیوس مدل BE-HD01 طول 2 متر",
+        "code": "TLP-430671",
+        "normal_price": 1700000,
+        "discount": "36%",
+        "discounted_price": 1100000,
+        "marketing_group": "تکنو تایم",
+        "available": 19,
+        "deadline": "1791023419127"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "type": "FirstCenterCarousel",
+    "componentConfig": {
+     "title": "لپ‌تاپ‌ها در تکنولایف"
+    },
+    "banners": [],
+    "product_tabs": [
+     {
+      "TabTitle": "لپ‌تاپ‌ها در تکنولایف",
+      "TabContent": [
+       {
+        "name": "لپ تاپ 15.6 اینچی ایسوس مدل ExpertBook B1503CVA i5 1334U 16GB 512GB",
+        "code": "TLP-313735",
+        "normal_price": 172400000,
+        "discount": null,
+        "discounted_price": null,
+        "marketing_group": null,
+        "available": 6,
+        "deadline": null
+       },
+       {
+        "name": "لپ تاپ اچ پی 15.6 اینچی مدل Victus 15 FA2082WM i5 13420H 16GB 512GB RTX4050",
+        "code": "TLP-239877",
+        "normal_price": 259900000,
+        "discount": null,
+        "discounted_price": null,
+        "marketing_group": null,
+        "available": 4,
+        "deadline": null
+       },
+       {
+        "name": "لپ تاپ لنوو 15.6 اینچی مدل V15 G4 i5 13420H 16GB 512GB SSD",
+        "code": "TLP-49420",
+        "normal_price": 165000000,
+        "discount": null,
+        "discounted_price": null,
+        "marketing_group": null,
+        "available": 3,
+        "deadline": null
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "type": "BrandBanners",
+    "componentConfig": null,
+    "banners": [
+     {
+      "link": "/brand/samsung",
+      "title": "سامسونگ",
+      "alt": null
+     },
+     {
+      "link": "/brand/xiaomi",
+      "title": "شیائومی",
+      "alt": null
+     },
+     {
+      "link": "/sellers/seller-11507/%D9%85%D8%AF%D9%88%D9%BE%D8%AF",
+      "title": "مد و پد",
+      "alt": null
+     },
+     {
+      "link": "https://www.technolife.com/promotion/apacer-storage/%D8%AA%D8%AC%D9%87%DB%8C%D8%B2%D8%A7%D8%AA-%D8%B0%D8%AE%DB%8C%D8%B1%D9%87-%D8%B3%D8%A7%D8%B2%DB%8C-%D8%A7%D9%BE%DB%8C%D8%B3%D8%B1",
+      "title": "اپیسر",
+      "alt": null
+     },
+     {
+      "link": "https://www.technolife.com/promotion/kingstar-matin/kingstar-matin",
+      "title": "کینگ استار",
+      "alt": null
+     }
+    ],
+    "product_tabs": []
+   }
+  ]
+ }
+}

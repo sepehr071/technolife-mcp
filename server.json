@@ -1,0 +1,32 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.sepehr071/technolife-mcp",
+  "title": "Technolife",
+  "description": "Unofficial read-only Technolife: search electronics, compare sellers and installment prices, deals.",
+  "repository": {
+    "url": "https://github.com/sepehr071/technolife-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/sepehr071/technolife-mcp",
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "registryBaseUrl": "https://pypi.org",
+      "identifier": "technolife-mcp",
+      "version": "0.1.0",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "TECHNOLIFE_MCP_PROXY",
+          "description": "Optional HTTP proxy URL for every request. System proxy settings are ignored.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

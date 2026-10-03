@@ -1,0 +1,69 @@
+{
+ "data": {
+  "get_menu_products": {
+   "results": [
+    {
+     "name": "لپ تاپ لنوو 15.6 اینچی V15 N4500 16GB 128GB",
+     "code": "TLP-33392",
+     "normal_price": 101000000,
+     "discount": null,
+     "discounted_price": null,
+     "deadline": null,
+     "score_count": 19,
+     "score_avg": 3.5789473684210527,
+     "available": 1,
+     "marketing_group": null
+    },
+    {
+     "name": "لپ تاپ لنوو 15.6 اینچی V15 N4500 16GB 256GB",
+     "code": "TLP-33391",
+     "normal_price": 102500000,
+     "discount": null,
+     "discounted_price": null,
+     "deadline": null,
+     "score_count": 40,
+     "score_avg": 3.95,
+     "available": 3000,
+     "marketing_group": null
+    },
+    {
+     "name": "لپ تاپ لنوو 15.6 اینچی V15 N4500 16GB 256GB IPS",
+     "code": "TLP-239652",
+     "normal_price": 102900000,
+     "discount": null,
+     "discounted_price": null,
+     "deadline": null,
+     "score_count": 0,
+     "score_avg": 0,
+     "available": 1,
+     "marketing_group": null
+    },
+    {
+     "name": "لپ تاپ 15.6 اینچی لنوو مدل IdeaPad 1 15IJL7 Celeron N4500 16GB 256GB",
+     "code": "TLP-107599",
+     "normal_price": 103000000,
+     "discount": null,
+     "discounted_price": null,
+     "deadline": null,
+     "score_count": 21,
+     "score_avg": 3.9523809523809526,
+     "available": 3000,
+     "marketing_group": null
+    },
+    {
+     "name": "لپ تاپ لنوو 15.6 اینچی مدل IdeaPad 1 N4500 16GB 256GB",
+     "code": "TLP-62738",
+     "normal_price": 104900000,
+     "discount": null,
+     "discounted_price": null,
+     "deadline": null,
+     "score_count": 19,
+     "score_avg": 3.6842105263157894,
+     "available": 2,
+     "marketing_group": null
+    }
+   ],
+   "count": 258
+  }
+ }
+}

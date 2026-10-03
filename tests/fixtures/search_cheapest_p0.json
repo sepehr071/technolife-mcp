@@ -1,0 +1,105 @@
+{
+ "data": {
+  "search_page_results": {
+   "results": [
+    {
+     "name": "لپ تاپ لنوو 15.6 اینچی V15 N4500 4GB 128GB",
+     "code": "TLP-33427",
+     "normal_price": 82000000,
+     "discount": null,
+     "discounted_price": 82000000,
+     "deadline": null,
+     "score_count": 15,
+     "score_avg": 3.533333333333333,
+     "available": 1,
+     "marketing_group": ""
+    },
+    {
+     "name": "لپ تاپ لنوو 15.6 اینچی V15 N4500 4GB 256GB",
+     "code": "TLP-33067",
+     "normal_price": 83500000,
+     "discount": null,
+     "discounted_price": 83500000,
+     "deadline": null,
+     "score_count": 29,
+     "score_avg": 3.7586206896551726,
+     "available": 2,
+     "marketing_group": ""
+    },
+    {
+     "name": "لپ تاپ لنوو 15.6 اینچی V15 N4500 8GB 128GB",
+     "code": "TLP-33507",
+     "normal_price": 88000000,
+     "discount": null,
+     "discounted_price": 88000000,
+     "deadline": null,
+     "score_count": 18,
+     "score_avg": 3.7222222222222223,
+     "available": 1,
+     "marketing_group": ""
+    }
+   ],
+   "count": 1053,
+   "page_filters": [
+    {
+     "title": "فیلتر براساس قیمت",
+     "items": [],
+     "price_range": {
+      "min": 0,
+      "max": 1355740000
+     }
+    },
+    {
+     "title": "برندها",
+     "items": [
+      {
+       "name": "ایسوس: 5659",
+       "code": "19"
+      },
+      {
+       "name": "لنوو: 3872",
+       "code": "16"
+      },
+      {
+       "name": "اچ پی: 2547",
+       "code": "89"
+      },
+      {
+       "name": "ایسر: 1166",
+       "code": "55"
+      }
+     ],
+     "price_range": {
+      "min": 0,
+      "max": 1355740000
+     }
+    },
+    {
+     "title": "دسته بندی ها",
+     "items": [
+      {
+       "name": "لپ تاپ: 14319",
+       "code": "19"
+      },
+      {
+       "name": "کیف لپ تاپ: 1193",
+       "code": "87"
+      },
+      {
+       "name": "لپ تاپ استوک: 481",
+       "code": "1793"
+      },
+      {
+       "name": "آل این وان: 430",
+       "code": "217"
+      }
+     ],
+     "price_range": {
+      "min": 0,
+      "max": 1355740000
+     }
+    }
+   ]
+  }
+ }
+}

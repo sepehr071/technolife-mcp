@@ -1,0 +1,81 @@
+{
+ "data": {
+  "marketing_group_results": {
+   "results": [
+    {
+     "name": "مجموعه سه عددی چمدان دلسی مدل  CHATELET AIR 2.0 کد 1676985",
+     "code": "TLP-598756",
+     "normal_price": 459000000,
+     "discount": "66%",
+     "discounted_price": 159000000,
+     "deadline": "1792654800000",
+     "score_count": 0,
+     "score_avg": 0,
+     "available": 2,
+     "marketing_group": "تکنوآف"
+    },
+    {
+     "name": "فلش مموری پی ان وای مدل PRO ELITE ظرفیت 256 گیگابایت",
+     "code": "TLP-37131",
+     "normal_price": 299000000,
+     "discount": "71%",
+     "discounted_price": 89000000,
+     "deadline": "1791059040000",
+     "score_count": 0,
+     "score_avg": 0,
+     "available": 1,
+     "marketing_group": "تکنوآف"
+    },
+    {
+     "name": "یخچال فریزر بنس 21 فوت مدل ونوس T7",
+     "code": "TLP-35893",
+     "normal_price": 362974800,
+     "discount": "57%",
+     "discounted_price": 158000000,
+     "deadline": "1792697100000",
+     "score_count": 19,
+     "score_avg": 4.473684210526316,
+     "available": 1,
+     "marketing_group": "تکنوآف"
+    },
+    {
+     "name": "یخچال فریزر دوقلو لایف مدل گلوریوس",
+     "code": "TLP-102071",
+     "normal_price": 431838000,
+     "discount": "43%",
+     "discounted_price": 248000000,
+     "deadline": "1792685160000",
+     "score_count": 20,
+     "score_avg": 4.15,
+     "available": 2,
+     "marketing_group": "تکنوآف"
+    },
+    {
+     "name": "لپ تاپ اپل 14.2 اینچی مدل MacBook Pro MGDU4 M5 Max 2026 36GB 2TB",
+     "code": "TLP-447508",
+     "normal_price": 1158901800,
+     "discount": "16%",
+     "discounted_price": 984000000,
+     "deadline": "1792667040000",
+     "score_count": 0,
+     "score_avg": 0,
+     "available": 2,
+     "marketing_group": "تکنوآف"
+    },
+    {
+     "name": "لپ تاپ اپل 14.2 اینچی مدل MacBook Pro MGDQ4 M5 Max 2026 36GB 2TB",
+     "code": "TLP-447509",
+     "normal_price": 1156602300,
+     "discount": "14%",
+     "discounted_price": 1003000000,
+     "deadline": "1792667040000",
+     "score_count": 0,
+     "score_avg": 0,
+     "available": 2,
+     "marketing_group": "تکنوآف"
+    }
+   ],
+   "count": 24789
+  }
+ }
+}

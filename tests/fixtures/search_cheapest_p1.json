@@ -1,0 +1,117 @@
+{
+ "data": {
+  "search_page_results": {
+   "results": [
+    {
+     "name": "لپ تاپ لنوو 16 اینچی مدل IdeaPad Slim 3 i5 13420H 8GB 1TB",
+     "code": "TLP-301537",
+     "normal_price": 185000000,
+     "discount": null,
+     "discounted_price": 185000000,
+     "deadline": null,
+     "score_count": 0,
+     "score_avg": 0,
+     "available": 1,
+     "marketing_group": ""
+    },
+    {
+     "name": "لپ تاپ لنوو 16 اینچی IdeaPad Slim3 i5 13420H 8GB 1TB WUXGA + Backlit       ",
+     "code": "TLP-520701",
+     "normal_price": 185000000,
+     "discount": null,
+     "discounted_price": 185000000,
+     "deadline": null,
+     "score_count": 0,
+     "score_avg": 0,
+     "available": 1,
+     "marketing_group": ""
+    },
+    {
+     "name": "لپ تاپ لنوو 15.6 اینچی V15 G5 i5 13420H 16GB 512GB TN",
+     "code": "TLP-296543",
+     "normal_price": 186000000,
+     "discount": null,
+     "discounted_price": 186000000,
+     "deadline": null,
+     "score_count": 0,
+     "score_avg": 0,
+     "available": 1,
+     "marketing_group": ""
+    },
+    {
+     "name": "لپ تاپ لنوو 16 اینچی مدل IdeaPad Slim3 i7 13620H 8GB 512GB WUXGA  ",
+     "code": "TLP-520836",
+     "normal_price": 190000000,
+     "discount": null,
+     "discounted_price": 190000000,
+     "deadline": null,
+     "score_count": 0,
+     "score_avg": 0,
+     "available": 1,
+     "marketing_group": ""
+    }
+   ],
+   "count": 1053,
+   "page_filters": [
+    {
+     "title": "فیلتر براساس قیمت",
+     "items": [],
+     "price_range": {
+      "min": 0,
+      "max": 1355740000
+     }
+    },
+    {
+     "title": "برندها",
+     "items": [
+      {
+       "name": "ایسوس: 5659",
+       "code": "19"
+      },
+      {
+       "name": "لنوو: 3872",
+       "code": "16"
+      },
+      {
+       "name": "اچ پی: 2547",
+       "code": "89"
+      },
+      {
+       "name": "ایسر: 1166",
+       "code": "55"
+      }
+     ],
+     "price_range": {
+      "min": 0,
+      "max": 1355740000
+     }
+    },
+    {
+     "title": "دسته بندی ها",
+     "items": [
+      {
+       "name": "لپ تاپ: 14319",
+       "code": "19"
+      },
+      {
+       "name": "کیف لپ تاپ: 1193",
+       "code": "87"
+      },
+      {
+       "name": "لپ تاپ استوک: 481",
+       "code": "1793"
+      },
+      {
+       "name": "آل این وان: 430",
+       "code": "217"
+      }
+     ],
+     "price_range": {
+      "min": 0,
+      "max": 1355740000
+     }
+    }
+   ]
+  }
+ }
+}

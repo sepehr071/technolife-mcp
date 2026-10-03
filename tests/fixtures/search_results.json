@@ -1,0 +1,129 @@
+{
+ "data": {
+  "search_page_results": {
+   "results": [
+    {
+     "name": "گوشی موبایل اپل مدل iPhone 16 CH/A ظرفیت 128 گیگابایت رم 8 گیگابایت رجیستر شده",
+     "code": "TLP-69610",
+     "normal_price": 317000000,
+     "discount": null,
+     "discounted_price": 317000000,
+     "deadline": "2026-09-12T10:46:23.329Z",
+     "score_count": 663,
+     "score_avg": 4.383107088989442,
+     "available": 3000,
+     "marketing_group": "تکنوآف"
+    },
+    {
+     "name": "گوشی موبایل اپل iPhone 14 CH نات اکتیو ظرفیت 128 گیگابایت رم 6 گیگابایت رجیستر شده",
+     "code": "TLP-7452",
+     "normal_price": 249000000,
+     "discount": "4%",
+     "discounted_price": 239900000,
+     "deadline": "1792657560000",
+     "score_count": 117,
+     "score_avg": 4.427350427350428,
+     "available": 1,
+     "marketing_group": "تکنوآف"
+    },
+    {
+     "name": "گوشی موبایل اپل مد‌ل iPhone 17 CH/A ظرفیت 256 گیگابایت رم 8 گیگابایت - Not Active رجیستر شده",
+     "code": "TLP-165487",
+     "normal_price": 369999000,
+     "discount": "5%",
+     "discounted_price": 351599000,
+     "deadline": "1792685460000",
+     "score_count": 103,
+     "score_avg": 4.262135922330097,
+     "available": 3000,
+     "marketing_group": "تکنوآف"
+    },
+    {
+     "name": "گوشی موبایل اپل مد‌ل iPhone 17 CH/A ظرفیت 256 گیگابایت رم 8 گیگابایت - Not Active رجیستر شده به همراه شارژر دیواری اپل 20 وات مدل 3 پین B/A - اورجینال",
+     "code": "TLP-586168",
+     "normal_price": 369999000,
+     "discount": "3%",
+     "discounted_price": 359999000,
+     "deadline": "1792664640000",
+     "score_count": 2,
+     "score_avg": 3.5,
+     "available": 1,
+     "marketing_group": "تکنوآف"
+    },
+    {
+     "name": "گوشی موبایل اپل مد‌ل iPhone 17 CH/A ظرفیت 256 گیگابایت رم 8 گیگابایت - Not Active رجیستر شده به همراه پاوربانک بی سیم شیائومی مدل UltraThin MDY-20-EB ظرفیت 5000 میلی آمپر",
+     "code": "TLP-603463",
+     "normal_price": 379999000,
+     "discount": "5%",
+     "discounted_price": 362999000,
+     "deadline": "1792666620000",
+     "score_count": 0,
+     "score_avg": 0,
+     "available": 3000,
+     "marketing_group": "تکنوآف"
+    }
+   ],
+   "count": 15,
+   "page_filters": [
+    {
+     "title": "فیلتر براساس قیمت",
+     "items": [],
+     "price_range": {
+      "min": 0,
+      "max": 1355740000
+     }
+    },
+    {
+     "title": "برندها",
+     "items": [
+      {
+       "name": "متفرقه: 16207",
+       "code": "18"
+      },
+      {
+       "name": "کوکونات: 2941",
+       "code": "646"
+      },
+      {
+       "name": "ایسوس: 2409",
+       "code": "19"
+      },
+      {
+       "name": "آلتیمیت شیلد: 2067",
+       "code": "6811"
+      }
+     ],
+     "price_range": {
+      "min": 0,
+      "max": 1355740000
+     }
+    },
+    {
+     "title": "دسته بندی ها",
+     "items": [
+      {
+       "name": "قاب و کیف گوشی: 14369",
+       "code": "02"
+      },
+      {
+       "name": "گلس و محافظ گوشی: 12870",
+       "code": "05"
+      },
+      {
+       "name": "لپ تاپ: 5840",
+       "code": "19"
+      },
+      {
+       "name": "بند ساعت هوشمند: 5333",
+       "code": "156"
+      }
+     ],
+     "price_range": {
+      "min": 0,
+      "max": 1355740000
+     }
+    }
+   ]
+  }
+ }
+}

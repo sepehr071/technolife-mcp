@@ -1,0 +1,33 @@
+{
+ "data": {
+  "get_basket_notLogin": {
+   "products": [
+    {
+     "_id": "68a8a44fd66b224721bea068",
+     "insurance_count": 1,
+     "insurance_price": 2446250,
+     "count": 2,
+     "max_valid_count": 1,
+     "code": "TLP-60492",
+     "price": 257500000,
+     "discount": 0,
+     "discounted_price": 128750000,
+     "color": {
+      "value": "خاکستری"
+     },
+     "guarantee": "18 ماه گارانتی شرکتی",
+     "seller": "ایران پشتیبان",
+     "title": "لپ تاپ لنوو 15.6 اینچی مدل IdeaPad Slim 3 i3 1315U 8GB 512GB",
+     "stock_text": "موجود در انبار فروشنده",
+     "cluster_type": "LOAN"
+    }
+   ],
+   "purchase_box": {
+    "price": 257500000,
+    "final_price": 259946250,
+    "discount": 0,
+    "insurance_bill": 2446250
+   }
+  }
+ }
+}

@@ -1,0 +1,132 @@
+{
+ "data": {
+  "get_landing_page_daynamic": {
+   "code": "payday-technolife-web",
+   "meta_title": "خرید سر ماه",
+   "components": [
+    {
+     "name": "اسلایدر",
+     "component_type": "banner_slider_full",
+     "carousel": {
+      "related_page_link": null,
+      "products": []
+     },
+     "banners": [
+      {
+       "link": "https://www.technolife.com/promotion/hsp/hsp",
+       "title": "هرچی بخری، آیفون 18 پرومکس میبری!"
+      }
+     ]
+    },
+    {
+     "name": "هرچی نیاز داری اینجاست..",
+     "component_type": "square_sub_title",
+     "carousel": {
+      "related_page_link": null,
+      "products": []
+     },
+     "banners": [
+      {
+       "link": "https://www.technolife.com/landings/mobiledprice",
+       "title": "گوشی‌ موبایل"
+      },
+      {
+       "link": "https://www.technolife.com/landings/laptopfordemand",
+       "title": "لپ‌تاپ"
+      },
+      {
+       "link": "https://www.technolife.com/landings/tabletbts",
+       "title": "تبلت"
+      }
+     ]
+    },
+    {
+     "name": "جداکننده",
+     "component_type": "separator",
+     "carousel": {
+      "related_page_link": null,
+      "products": []
+     },
+     "banners": []
+    },
+    {
+     "name": "از پرفروش‌‌های تکنولایف بخر، آیفون 18 ببر!",
+     "component_type": "carousel",
+     "carousel": {
+      "related_page_link": "/promotion/hsp/hsp?ordering=order-desc",
+      "products": [
+       {
+        "name": "هندزفری بی سیم انکر مدل Soundcore R50i",
+        "code": "TLP-21162",
+        "normal_price": 2999000,
+        "discount": "10%",
+        "discounted_price": 2719000,
+        "marketing_group": "تکنوآف",
+        "available": 163,
+        "deadline": "1792688520000"
+       },
+       {
+        "name": "گوشی موبايل سامسونگ Galaxy A26 5G ظرفیت 128 گیگابایت رم 6 گیگابایت - ویتنام",
+        "code": "TLP-99215",
+        "normal_price": 75500000,
+        "discount": null,
+        "discounted_price": null,
+        "marketing_group": null,
+        "available": 10,
+        "deadline": null
+       },
+       {
+        "name": "سکه پارسیان 30 سوت 18 عیار طلا پارسس مدل GZ001",
+        "code": "TLP-168926",
+        "normal_price": 810600,
+        "discount": null,
+        "discounted_price": 794390,
+        "marketing_group": "تکنوآف",
+        "available": 83,
+        "deadline": "1785288000000"
+       },
+       {
+        "name": "فر کننده مو شیگلم مدل It-Curl One-Touch Instant Curler سایز 25 میلی متر",
+        "code": "TLP-107387",
+        "normal_price": 3650000,
+        "discount": null,
+        "discounted_price": 2850000,
+        "marketing_group": "تکنوآف",
+        "available": 1022,
+        "deadline": "1775558700000"
+       }
+      ]
+     },
+     "banners": []
+    },
+    {
+     "name": "جداکننده",
+     "component_type": "separator",
+     "carousel": {
+      "related_page_link": null,
+      "products": []
+     },
+     "banners": []
+    },
+    {
+     "name": "دوتایی",
+     "component_type": "twin_banners",
+     "carousel": {
+      "related_page_link": null,
+      "products": []
+     },
+     "banners": [
+      {
+       "link": "https://www.technolife.com/category/mobile",
+       "title": "گوشی موبایل"
+      },
+      {
+       "link": "https://www.technolife.com/category/home-app",
+       "title": "لوازم خونه"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

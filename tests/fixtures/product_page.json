@@ -1,0 +1,186 @@
+{
+ "data": {
+  "get_product_page": {
+   "has_insurance": true,
+   "product_info": {
+    "_id": "66f2afb5b40f4af2a039da67",
+    "code": "TLP-60492",
+    "title": "لپ تاپ لنوو 15.6 اینچی مدل IdeaPad Slim 3 i3 1315U 8GB 512GB",
+    "model": "Lenovo IdeaPad Slim 3 i3 1315U 8GB RAM 512GB SSD",
+    "is_available": true,
+    "score_avg": 4.177777777777778,
+    "score_count": 45,
+    "category": {
+     "code": "TLC-19",
+     "name": "لپ تاپ"
+    },
+    "brand": {
+     "name": "لنوو",
+     "enName": "Lenovo",
+     "code": "BR-16"
+    }
+   },
+   "seller_items_component": [
+    {
+     "color": {
+      "value": "خاکستری"
+     },
+     "seller_items": [
+      {
+       "_id": "68a8a44fd66b224721bea068",
+       "seller": "ایران پشتیبان",
+       "seller_code": "TLS-15172",
+       "price": 125000000,
+       "discounted_price": 125000000,
+       "discount": null,
+       "guarantee": "18 ماه گارانتی شرکتی",
+       "available": 1,
+       "stock_text": "موجود در انبار فروشنده",
+       "delivery_text": "ارسال از 1 روز کاری بعد",
+       "insurance": {
+        "bill": 2375000
+       },
+       "score": 5,
+       "on_schedule": 100,
+       "faultless": 100,
+       "is_techno": false,
+       "is_turbo": false,
+       "deadline": null,
+       "marketing_group": null
+      },
+      {
+       "_id": "670be6f4c161f1a2bebd79a4",
+       "seller": "چیتک شاپ",
+       "seller_code": "TLS-1445",
+       "price": 129500000,
+       "discounted_price": 129500000,
+       "discount": null,
+       "guarantee": "18 ماه گارانتی شرکتی",
+       "available": 1,
+       "stock_text": "موجود در انبار فروشنده",
+       "delivery_text": "ارسال از 1 روز کاری بعد",
+       "insurance": {
+        "bill": 2460500
+       },
+       "score": 5,
+       "on_schedule": 100,
+       "faultless": 100,
+       "is_techno": false,
+       "is_turbo": false,
+       "deadline": null,
+       "marketing_group": null
+      },
+      {
+       "_id": "66f3afeca6c6e0720f325c97",
+       "seller": "دیباکام",
+       "seller_code": "TLS-1350",
+       "price": 130000000,
+       "discounted_price": 130000000,
+       "discount": null,
+       "guarantee": "18 ماه گارانتی دیباکام پردازش سدرا",
+       "available": 2,
+       "stock_text": "موجود در انبار فروشنده",
+       "delivery_text": "ارسال از 1 روز کاری بعد",
+       "insurance": {
+        "bill": 2470000
+       },
+       "score": 5,
+       "on_schedule": 100,
+       "faultless": 100,
+       "is_techno": false,
+       "is_turbo": false,
+       "deadline": null,
+       "marketing_group": null
+      }
+     ],
+     "cluster_seller_items": [
+      {
+       "cluster_type": {
+        "name": "LOAN"
+       },
+       "seller_items": [
+        {
+         "_id": "68a8a44fd66b224721bea068",
+         "seller_code": "TLS-15172",
+         "price": 128750000,
+         "discounted_price": 128750000,
+         "available": 1
+        },
+        {
+         "_id": "670be6f4c161f1a2bebd79a4",
+         "seller_code": "TLS-1445",
+         "price": 133385000,
+         "discounted_price": 133385000,
+         "available": 1
+        },
+        {
+         "_id": "66f3afeca6c6e0720f325c97",
+         "seller_code": "TLS-1350",
+         "price": 133900000,
+         "discounted_price": 133900000,
+         "available": 2
+        }
+       ]
+      },
+      {
+       "cluster_type": {
+        "name": "BNPL"
+       },
+       "seller_items": [
+        {
+         "_id": "68a8a44fd66b224721bea068",
+         "seller_code": "TLS-15172",
+         "price": 135000000,
+         "discounted_price": 135000000,
+         "available": 1
+        },
+        {
+         "_id": "670be6f4c161f1a2bebd79a4",
+         "seller_code": "TLS-1445",
+         "price": 139860000,
+         "discounted_price": 139860000,
+         "available": 1
+        },
+        {
+         "_id": "66f3afeca6c6e0720f325c97",
+         "seller_code": "TLS-1350",
+         "price": 140400000,
+         "discounted_price": 140400000,
+         "available": 2
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "configurations_component": [
+    {
+     "title": "مشخصات کلی",
+     "info": [
+      {
+       "item": "سری لپ تاپ",
+       "value": "Ideapad Slim 3"
+      },
+      {
+       "item": "نوع کاربری",
+       "value": "عمومی/ مالتی مدیا"
+      }
+     ]
+    },
+    {
+     "title": "مشخصات فیزیکی",
+     "info": [
+      {
+       "item": "ابعاد",
+       "value": "359.3x235x17.9 میلی متر\n"
+      },
+      {
+       "item": "وزن",
+       "value": "1.6 کیلوگرم\n"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

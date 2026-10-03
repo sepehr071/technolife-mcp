@@ -1,0 +1,22 @@
+{
+ "data": {
+  "getSubBreadCrumbProductList": [
+   {
+    "name": "گوشی موبایل نوکیا",
+    "url": "/category/mobile/mobile-phone/brand-nokia"
+   },
+   {
+    "name": "گوشی موبایل شیائومی",
+    "url": "/category/mobile/mobile-phone/brand-xiaomi"
+   },
+   {
+    "name": "گوشی موبایل سامسونگ",
+    "url": "/category/mobile/mobile-phone/brand-samsung"
+   },
+   {
+    "name": "گوشی موبایل پوکو",
+    "url": "/category/mobile/mobile-phone/brand-poco"
+   }
+  ]
+ }
+}

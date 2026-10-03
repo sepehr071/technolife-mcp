@@ -1,0 +1,102 @@
+{
+ "data": {
+  "getNavBar": {
+   "title": "سایت",
+   "url_name": null,
+   "children": [
+    {
+     "title": "گوشی موبایل و تجهیزات",
+     "url_name": "/category/mobile",
+     "children": [
+      {
+       "title": "گوشی موبایل",
+       "url_name": "/category/mobile/mobile-phone",
+       "children": [
+        {
+         "title": "گوشی آیفون",
+         "url_name": "/category/mobile/mobile-phone/brand-apple",
+         "children": []
+        },
+        {
+         "title": "گوشی سامسونگ",
+         "url_name": "/category/mobile/mobile-phone/brand-samsung",
+         "children": []
+        }
+       ]
+      },
+      {
+       "title": "گوشی براساس عملکرد",
+       "url_name": "/product/list/69_811/گوشی-های-تخصصی",
+       "children": [
+        {
+         "title": "گوشی گیمینگ",
+         "url_name": "/category/mobile/mobile-phone/type-gaming",
+         "children": []
+        },
+        {
+         "title": "گوشی ساده و دکمه ای",
+         "url_name": "/category/mobile/mobile-phone/type-feature-phone",
+         "children": []
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "لپ تاپ و تجهیزات",
+     "url_name": "/category/laptop-equipment",
+     "children": [
+      {
+       "title": "لپ تاپ",
+       "url_name": "/category/laptop-equipment/laptop",
+       "children": [
+        {
+         "title": "لپ تاپ بر اساس برند",
+         "url_name": "/category/laptop-equipment/laptop",
+         "children": []
+        },
+        {
+         "title": "سری‌های محبوب لپ‌تاپ",
+         "url_name": "/category/laptop-equipment/laptop",
+         "children": []
+        }
+       ]
+      },
+      {
+       "title": "لپ‌تاپ بر اساس قیمت",
+       "url_name": "/category/laptop-equipment/laptop",
+       "children": [
+        {
+         "title": "لپ تاپ ارزان",
+         "url_name": "/category/laptop-equipment/laptop/price-economy",
+         "children": []
+        },
+        {
+         "title": "لپ تاپ تا 70 میلیون",
+         "url_name": "/category/laptop-equipment/laptop/price-up-to-70ml",
+         "children": []
+        }
+       ]
+      },
+      {
+       "title": "لپ تاپ براساس کاربرد",
+       "url_name": "/category/laptop-equipment/laptop",
+       "children": [
+        {
+         "title": "لپ تاپ گیمینگ",
+         "url_name": "/category/laptop-equipment/laptop/type-gaming",
+         "children": []
+        },
+        {
+         "title": "لپ تاپ دانشجویی",
+         "url_name": "/category/laptop-equipment/laptop/type-for-student",
+         "children": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ }
+}
