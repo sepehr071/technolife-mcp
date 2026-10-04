@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import re
 import time
 from datetime import datetime, timezone
 from typing import Annotated, Any, Literal
@@ -127,7 +128,8 @@ async def tl_find_cheapest(
     Use when the user wants the lowest price. Cheap accessories (cases, glass) and other
     models often match a model name ('آیفون 16' also matches Galaxy A16): check the returned
     `categories` and `brands`, call again with category_code and brand_codes, and check titles. Prices
-    are the best offer per product; tl_product shows every seller, color and installment price.
+    are the site's featured offer per product (not always the cheapest seller); tl_product shows every
+    seller, color and installment price.
     """
     results = await asyncio.gather(
         *(
@@ -205,7 +207,7 @@ async def _search(
 
 
 def _facets(s: dict[str, Any]) -> dict[str, Any]:
-    """Top categories and brands of a search ('name: count' labels) and its price range."""
+    """Top categories and brands of a search ('name: count' or 'name (count)' labels) and its price range."""
     out: dict[str, Any] = {"categories": [], "brands": [], "price_range": None}
     for f in s.get("page_filters") or []:
         title = f.get("title") or ""
@@ -215,12 +217,13 @@ def _facets(s: dict[str, Any]) -> dict[str, Any]:
         if not key:
             continue
         for item in [i for i in f.get("items") or [] if i and str(i.get("code")).isdigit()][:10]:
-            name, _, count = (item.get("name") or "").rpartition(": ")
+            label = item.get("name") or ""
+            m = re.fullmatch(r"(.+?)(?:: | \()(\d+)\)?", label)
             out[key].append(
                 {
                     "code": int(item["code"]),
-                    "name": name or count,
-                    "count": int(count) if name and count.isdigit() else None,
+                    "name": m[1] if m else label,
+                    "count": int(m[2]) if m else None,
                 }
             )
     return out
@@ -262,20 +265,27 @@ def rating(avg: Any, count: Any) -> float | None:
     return round(avg, 1) if avg and count else None
 
 
-def expired(ms: Any) -> bool:
-    """True when a discount deadline (epoch-millisecond string) has passed."""
+def deadline(value: Any) -> datetime | None:
+    """Discount deadlines are epoch-millisecond strings, or ISO strings on some cards."""
     try:
-        return int(ms) / 1000 < time.time()
-    except (TypeError, ValueError):
-        return False
-
-
-def ms_to_iso(ms: Any) -> str | None:
-    """Discount deadlines are epoch-millisecond strings."""
+        return datetime.fromtimestamp(int(value) / 1000, timezone.utc)
+    except (TypeError, ValueError, OverflowError, OSError):
+        pass
     try:
-        return datetime.fromtimestamp(int(ms) / 1000, timezone.utc).isoformat(timespec="minutes")
-    except (TypeError, ValueError):
+        return datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except (AttributeError, ValueError):
         return None
+
+
+def expired(value: Any) -> bool:
+    """True when a discount deadline has passed."""
+    d = deadline(value)
+    return d is not None and d.timestamp() < time.time()
+
+
+def ms_to_iso(value: Any) -> str | None:
+    d = deadline(value)
+    return d.astimezone(timezone.utc).isoformat(timespec="minutes") if d else None
 
 
 def product_url(code: str | None) -> str | None:

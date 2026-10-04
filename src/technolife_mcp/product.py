@@ -283,9 +283,9 @@ async def tl_price_basket(
     d = data.get("get_basket_notLogin") or {}
     lines = []
     for p in d.get("products") or []:
-        unit = p.get("discounted_price") or 0
         count = p.get("count") or 0
         normal = (p.get("price") or 0) / (count or 1)  # price is the undiscounted line price
+        unit = p.get("discounted_price") or round(normal)
         insurance = p.get("insurance_price") or 0  # per insured unit
         lines.append(
             {

@@ -93,7 +93,7 @@ async def test_tl_category_products_bad_page(client, api):
     assert result.is_error and "tl_categories" in result.content[0].text
     # the same error comes back when nothing is priced inside the range
     result = await client.call_tool("tl_category_products", {"url": "brand/samsung", "max_price": 1000})
-    assert result.is_error and "no product in that price range" in result.content[0].text
+    assert result.is_error and "no product matches those filters" in result.content[0].text
 
 
 async def test_tl_category_products_rejects_other_urls(client, api):

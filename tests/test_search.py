@@ -62,6 +62,7 @@ async def test_tl_search_relevance_keeps_api_order(client, api):
     api["search_page_results"] = fixture("search_results.json")
     data = (await client.call_tool("tl_search", {"query": "آیفون 16", "in_stock": False, "page": 2})).structured_content
     assert data["products"][0]["code"] == "TLP-69610"
+    assert data["products"][0]["deal"] is None  # some cards send an ISO deadline (2026-09-12), already past
     sent = variables(api.calls[0])["filter"]
     assert sent["ordering"] == "kalascore" and sent["skip"] == 2 and "available" not in sent
 
@@ -78,6 +79,9 @@ async def test_tl_search_biggest_discount_resorts(client, api):
 async def test_tl_find_cheapest(client, api):
     pages = [fixture("search_cheapest_p0.json"), fixture("search_cheapest_p1.json")]
     pages[1]["data"]["search_page_results"]["results"][0]["available"] = 0  # out of stock: dropped
+    facets = pages[0]["data"]["search_page_results"]["page_filters"]
+    category = next(i for f in facets if "دسته" in f["title"] for i in f["items"] if i["code"] == "19")
+    category["name"] = "لپ تاپ (14319)"  # some searches label facets 'name (count)'
 
     def by_page(request):
         return httpx.Response(200, json=pages[variables(request)["filter"]["skip"]])

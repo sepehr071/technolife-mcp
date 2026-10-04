@@ -154,8 +154,9 @@ async def tl_category_products(
     try:
         data = await gql("shop_plp", MENU_PRODUCTS, {"url": page_url, "filterObj": flt})
     except GraphQLError as e:
-        # The site also answers this error when no product is priced inside min_price..max_price.
-        why = "no product in that price range, or an unknown url" if min_price or max_price else "an unknown url"
+        # The site also answers this error when no product matches the price range or filters.
+        filtered = min_price or max_price or brand_codes or attribute_codes or category_codes
+        why = "no product matches those filters, or an unknown url" if filtered else "an unknown url"
         raise ApiError(f"Could not load page '{url}' ({e}; {why}). {PAGE_HINT}") from e
     d = data.get("get_menu_products") or {}
     products = resort([card(p) for p in d.get("results") or []], sort)

@@ -159,6 +159,17 @@ async def test_tl_price_basket(client, api):
     assert data["insurance"] == 2446250 and data["price_before_discount"] == 257500000
 
 
+async def test_tl_price_basket_without_discount(client, api):
+    body = fixture("basket.json")
+    body["data"]["get_basket_notLogin"]["products"][0]["discounted_price"] = None
+    api["get_basket_notLogin"] = body
+    data = (
+        await client.call_tool("tl_price_basket", {"items": [{"seller_item_id": "68a8a44fd66b224721bea068"}]})
+    ).structured_content
+    line = data["items"][0]
+    assert (line["unit_price"], line["discount_pct"]) == (128750000, 0)
+
+
 async def test_tl_price_basket_rejects_repeated_item(client, api):
     item = {"seller_item_id": "68a8a44fd66b224721bea068"}
     result = await client.call_tool("tl_price_basket", {"items": [item, {**item, "payment": "installment"}]})

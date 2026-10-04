@@ -1,6 +1,6 @@
 [project]
 name = "technolife-mcp"
-version = "0.1.0"
+version = "0.1.1"
 description = "Unofficial read-only MCP server for Technolife: search electronics, compare sellers and installment prices, find deals."
 readme = "README.md"
 license = "MIT"
@@ -26,6 +26,8 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/sepehr071/technolife-mcp"
+Source = "https://github.com/sepehr071/technolife-mcp"
+Changelog = "https://github.com/sepehr071/technolife-mcp/releases"
 Issues = "https://github.com/sepehr071/technolife-mcp/issues"
 
 [project.scripts]

@@ -2,6 +2,8 @@
 
 <div align="center">
 
+<img src="https://raw.githubusercontent.com/sepehr071/technolife-mcp/main/.github/banner.png" alt="technolife-mcp: let your AI agent compare every seller on Technolife" width="100%">
+
 # 📱 technolife-mcp
 
 **Let your AI agent shop around on Technolife.**<br>
@@ -11,7 +13,7 @@ read specs and reviews, and catch today's deals, all from Claude, Cursor or Copi
 [![PyPI](https://img.shields.io/pypi/v/technolife-mcp?color=2563eb)](https://pypi.org/project/technolife-mcp/)
 [![Python](https://img.shields.io/pypi/pyversions/technolife-mcp)](https://pypi.org/project/technolife-mcp/)
 [![CI](https://github.com/sepehr071/technolife-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/sepehr071/technolife-mcp/actions/workflows/ci.yml)
-[![MCP Registry](https://img.shields.io/badge/MCP_Registry-io.github.sepehr071%2Ftechnolife--mcp-7c3aed)](https://registry.modelcontextprotocol.io/v0/servers?search=technolife-mcp)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-io.github.sepehr071%2Ftechnolife--mcp-7c3aed)](https://registry.modelcontextprotocol.io/?q=technolife-mcp)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16a34a)](https://github.com/sepehr071/technolife-mcp/blob/main/LICENSE)
 
 [![Install in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=technolife&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJ0ZWNobm9saWZlLW1jcCJdfQ==)
@@ -133,7 +135,8 @@ There's no hosted server in between, no API key, and nothing about you is sent a
 ## Tools
 
 Products are identified by codes like `TLP-60492` and sellers by `TLS-15172`. List tools return the
-best offer per product; `tl_product` returns every seller, color and price list.
+site's featured offer per product, which is not always the cheapest seller; `tl_product` returns every
+seller, color and price list.
 
 <details open>
 <summary><b>🔎 Search</b> (4)</summary>
