@@ -220,6 +220,13 @@ No, and that's deliberate. It has no login and never saves a basket or touches o
 </details>
 
 <details>
+<summary><b>Do I need an Iranian IP?</b></summary>
+
+No. It was tested from an Iranian home connection and from a Turkish IP, and both worked. Cloud servers outside Iran
+were not tested; if Technolife blocks one, set `TECHNOLIFE_MCP_PROXY`.
+</details>
+
+<details>
 <summary><b>I get "did not answer in time" or "Could not reach"</b></summary>
 
 Technolife sometimes resets connections; the server retries a failed connection once (timeouts are not retried). If it keeps failing, check your connection or set
@@ -257,6 +264,7 @@ npx @modelcontextprotocol/inspector uvx technolife-mcp
 - قیمت هر رنگ، فروشنده و گارانتی را همراه با قیمت اقساطی و هزینه بیمه نشان می&zwnj;دهد.
 - همه قیمت&zwnj;ها به تومان است.
 - روی سیستم خود شما اجرا می&zwnj;شود و به هیچ سرور واسطی داده نمی&zwnj;فرستد.
+- به IP ایران نیاز ندارد: با IP ایران و ترکیه آزمایش شده است.
 
 **نصب در Claude Code:**
 
