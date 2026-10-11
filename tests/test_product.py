@@ -13,6 +13,8 @@ async def test_tl_product(client, api):
     p = (await client.call_tool("tl_product", {"product_code": "60492"})).structured_content
     assert variables(api.calls[0]) == {"code": "TLP-60492"}
     assert p["title"] == "لپ تاپ لنوو 15.6 اینچی مدل IdeaPad Slim 3 i3 1315U 8GB 512GB"
+    # main_image is null in the fixture: the gallery starts with the main photo, at most 4 shown
+    assert p["image"].startswith("https://www.technolife.com/image/gallery-0-") and len(p["images"]) == 4
     assert p["rating"] == 4.2 and p["rating_count"] == 45 and p["brand_en"] == "Lenovo"
     assert [(o["seller_code"], o["final_price"]) for o in p["offers"]] == [
         ("TLS-1350", 117000000),
@@ -66,6 +68,7 @@ async def test_tl_compare(client, api):
     assert variables(api.calls[0]) == {"products": ["TLP-60492", "TLP-133524"]}
     assert data["category"] == "لپ تاپ"
     assert [p["final_price"] for p in data["products"]] == [125000000, 176800000]
+    assert all(p["image"].startswith("https://www.technolife.com/image/") for p in data["products"])
     assert data["specs"]["مشخصات فیزیکی"]["وزن"] == ["1.6 کیلوگرم", "--"]
 
 
@@ -152,6 +155,7 @@ async def test_tl_price_basket(client, api):
         ]
     }
     line = data["items"][0]
+    assert line["image"].startswith("https://www.technolife.com/image/")
     assert line["payment"] == "installment" and line["unit_price"] == 128750000
     assert line["line_total"] == 2 * 128750000 + 2446250 == data["total"]
     assert line["max_count"] == 1 and line["over_max_count"] is True

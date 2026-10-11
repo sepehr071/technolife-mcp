@@ -18,7 +18,28 @@
      "name": "لنوو",
      "enName": "Lenovo",
      "code": "BR-16"
-    }
+    },
+    "main_image": null,
+    "sub_images": [
+     {
+      "image": "/image/gallery-0-TLP-60492_0000.png"
+     },
+     {
+      "image": "/image/gallery-1-TLP-60492_0000.png"
+     },
+     {
+      "image": "/image/gallery-2-TLP-60492_0000.png"
+     },
+     {
+      "image": "/image/gallery-3-TLP-60492_0000.png"
+     },
+     {
+      "image": "/image/gallery-4-TLP-60492_0000.png"
+     },
+     {
+      "image": "/image/gallery-5-TLP-60492_0000.png"
+     }
+    ]
    },
    "seller_items_component": [
     {

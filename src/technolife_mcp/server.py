@@ -28,7 +28,7 @@ Workflow:
 Conventions: all prices are Toman (the API is Toman; 1 Toman = 10 Rial). final_price is the price
 after discount; discount_pct is computed from the two prices. Ratings are 0-5, null = not rated.
 Product codes look like 'TLP-60492', sellers 'TLS-15172'. List results show the site's featured
-offer per product, which is not always the cheapest; tl_product has the full offer list. Shipping cost is not included anywhere (it needs a
+offer per product, which is not always the cheapest; tl_product has the full offer list. Every product has an absolute https `image` URL (tl_product also `images`). Shipping cost is not included anywhere (it needs a
 logged-in address). Persian queries match best ('آیفون 16', 'لپ تاپ لنوو').
 """
 

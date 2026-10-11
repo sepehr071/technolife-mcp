@@ -24,6 +24,7 @@ async def test_tl_deals_biggest_percent(client, api):
     }
     # timed deals come from the تکنوآف and تکنو تایم home sections; the laptop carousel has no discount
     timed = data["timed_deals"]
+    assert all(p["image"].startswith("https://www.technolife.com/image/") for p in data["deals"] + timed)
     assert [d["code"] for d in timed] == ["TLP-167567", "TLP-31023", "TLP-586168", "TLP-175987", "TLP-511242"]
     assert timed[3]["section"] == "تکنو تایم" and timed[3]["discount_pct"] == 35
     assert timed[0]["section"] == "تکنوآف"  # the banner has no title of its own
@@ -62,6 +63,7 @@ async def test_tl_campaign_landing(client, api):
     carousel = data["sections"][2]
     assert carousel["page_url"] == "promotion/hsp" and carousel["products_in_carousel"] == 4
     assert [p["code"] for p in carousel["products"]] == ["TLP-21162", "TLP-99215"]
+    assert all(p["image"].startswith("https://www.technolife.com/image/") for p in carousel["products"])
     assert data["sections"][3]["links"][0] == {
         "title": "گوشی موبایل",
         "kind": "category",
@@ -98,6 +100,7 @@ async def test_tl_seller(client, api):
         ("TLP-49420", 165000000),
         ("TLP-133524", 176800000),
     ]
+    assert all(p["image"].startswith("https://www.technolife.com/image/") for p in data["products"])
     assert data["products"][2]["discount_pct"] == 0 and data["products"][2]["deal_ends"] is None
     assert variables(api.calls[0]) == {
         "seller_codes": ["15172"],

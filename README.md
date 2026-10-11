@@ -201,6 +201,7 @@ All 19 tools are annotated `readOnlyHint: true` and return compact structured JS
 - **Installments:** the same seller item costs a few percent more in the installment and buy-now-pay-later price lists; `tl_product` shows all three and `tl_price_basket` totals any of them.
 - **Shipping cost is not included** anywhere: Technolife only prices shipping for a logged-in address. `tl_store_info(topic="shipping")` has the rules.
 - **Price sorting:** the site's price order is approximate (timed deals lag), so price sorts are re-sorted on the real price.
+- **Images:** product results carry an absolute `image` URL (`tl_product` also an `images` list of up to 4). List cards give small thumbnails and `tl_product` larger gallery images; files are served as webp even though the URL ends in `.png`.
 - **Persian queries match best** (`آیفون 16`, `لپ تاپ لنوو`). Category search treats Arabic ي/ك and half-space vs space as equal.
 
 ## FAQ

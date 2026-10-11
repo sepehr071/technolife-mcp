@@ -1,4 +1,5 @@
 import pytest
+from conftest import assert_images
 from conftest import live_call as call
 
 pytestmark = [pytest.mark.anyio, pytest.mark.live]
@@ -17,6 +18,7 @@ async def test_tl_category_products(client):
     )
     prices = [p["final_price"] for p in data["products"]]
     assert data["total"] > 0 and prices == sorted(prices) and prices[0] > 0
+    assert_images(data["products"])
 
 
 async def test_tl_category_filters(client):

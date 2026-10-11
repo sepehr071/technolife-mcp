@@ -19,12 +19,12 @@ SPECIAL = (
 )
 HOME = (
     "query { get_landing_page { type componentConfig { title } banners { link title alt } "
-    "product_tabs { TabTitle TabContent { name code normal_price discount discounted_price marketing_group available deadline } } } }"
+    "product_tabs { TabTitle TabContent { name code image normal_price discount discounted_price marketing_group available deadline } } } }"
 )
 LANDING = (
     "query get_landing_page_daynamic ($code: String, $device_type: String, $landing_type: String) { "
     "get_landing_page_daynamic (code: $code, device_type: $device_type, landing_type: $landing_type) { code meta_title "
-    "components { name component_type carousel { related_page_link products { name code normal_price discount discounted_price marketing_group available deadline } } "
+    "components { name component_type carousel { related_page_link products { name code image normal_price discount discounted_price marketing_group available deadline } } "
     "banners { link title } } } }"
 )
 SELLER = (

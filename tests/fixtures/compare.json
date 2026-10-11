@@ -14,7 +14,8 @@
      "normal_price": 125000000,
      "discounted_price": 125000000,
      "discount": null,
-     "available": 4
+     "available": 4,
+     "image": "/image/small_product-TLP-60492_0000.png"
     },
     {
      "name": "لپ تاپ لنوو 15.3 اینچی مدل IdeaPad Slim 3 i5 13420H 16GB 512GB",
@@ -24,7 +25,8 @@
      "normal_price": 176800000,
      "discounted_price": 176800000,
      "discount": null,
-     "available": 5
+     "available": 5,
+     "image": "/image/small_product-TLP-133524_0000.png"
     }
    ],
    "config_table": [

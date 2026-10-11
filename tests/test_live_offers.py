@@ -1,4 +1,5 @@
 import pytest
+from conftest import assert_images
 from conftest import live_call as call
 
 pytestmark = [pytest.mark.anyio, pytest.mark.live]
@@ -11,6 +12,7 @@ async def test_tl_deals(client):
     pcts = [d["discount_pct"] for d in data["deals"]]
     assert pcts and pcts == sorted(pcts, reverse=True) and pcts[-1] > 0
     assert all(d["final_price"] < d["price"] for d in data["deals"])
+    assert_images(data["deals"] + data["timed_deals"])
 
 
 async def test_tl_campaigns(client):
@@ -18,8 +20,10 @@ async def test_tl_campaigns(client):
     landing = next(c for c in data["campaigns"] if c["kind"] == "landing")
     detail = await call(client, "tl_campaigns", {"code": landing["code"]})
     assert detail["sections"]
+    assert_images([p for s in detail["sections"] for p in s.get("products") or []])
 
 
 async def test_tl_seller(client):
     data = await call(client, "tl_seller", {"seller_code": SELLER, "limit": 5})
     assert data["seller"]["code"] == SELLER and 0 <= data["seller"]["rating"] <= 5 and data["products"]
+    assert_images(data["products"])

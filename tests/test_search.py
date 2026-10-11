@@ -11,9 +11,12 @@ async def test_tl_suggest(client, api):
     assert data["products"][0] == {
         "code": "TLP-69610",
         "title": "گوشی موبایل اپل مدل iPhone 16 CH/A ظرفیت 128 گیگابایت رم 8 گیگابایت رجیستر شده",
+        "image": "https://www.technolife.com/image/small_product-TLP-69610_0000.png",
         "url": "https://www.technolife.com/product-69610",
     }
     assert len(data["products"]) == 3 and data["pages"] == []
+    assert all(p["image"].startswith("https://www.technolife.com/image/") for p in data["products"])
+    assert all(p["image"].startswith("https://www.technolife.com/image/") for p in data["products"])
     assert variables(api.calls[0]) == {"text": "آیفون 16"}
 
 
@@ -33,6 +36,7 @@ async def test_tl_search_cheapest_resorts_on_real_price(client, api):
     assert data["products"][0] == {
         "code": "TLP-7452",
         "title": "گوشی موبایل اپل iPhone 14 CH نات اکتیو ظرفیت 128 گیگابایت رم 6 گیگابایت رجیستر شده",
+        "image": "https://www.technolife.com/image/small_product-TLP-7452_0000.png",
         "final_price": 239900000,
         "price": 249000000,
         "discount_pct": 4,
@@ -44,6 +48,8 @@ async def test_tl_search_cheapest_resorts_on_real_price(client, api):
         "url": "https://www.technolife.com/product-7452",
     }
     assert data["total"] == 15
+    assert all(p["image"].startswith("https://www.technolife.com/image/") for p in data["products"])
+    assert all(p["image"].startswith("https://www.technolife.com/image/") for p in data["products"])
     assert data["categories"][0] == {"code": 2, "name": "قاب و کیف گوشی", "count": 14369}
     assert data["brands"][2] == {"code": 19, "name": "ایسوس", "count": 2409}
     assert data["price_range"] == {"min": 0, "max": 1355740000}
@@ -93,6 +99,7 @@ async def test_tl_find_cheapest(client, api):
     prices = [p["final_price"] for p in data["products"]]
     assert prices == [82000000, 83500000, 88000000, 185000000, 186000000, 190000000]
     assert data["scanned"] == 6 and data["total"] == 1053
+    assert all(p["image"].startswith("https://www.technolife.com/image/") for p in data["products"])
     assert data["categories"][0] == {"code": 19, "name": "لپ تاپ", "count": 14319}
     sent = sorted(
         (variables(r)["filter"]["skip"], variables(r)["filter"]["limit"], variables(r)["filter"]["ordering"])

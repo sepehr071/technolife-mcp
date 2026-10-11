@@ -1,4 +1,5 @@
 import pytest
+from conftest import assert_image_served, assert_images
 from conftest import live_call as call
 
 pytestmark = [pytest.mark.anyio, pytest.mark.live]
@@ -7,6 +8,7 @@ pytestmark = [pytest.mark.anyio, pytest.mark.live]
 async def test_tl_suggest(client):
     data = await call(client, "tl_suggest", {"query": "آیفون 16"})
     assert data["products"] and all(p["code"].startswith("TLP-") for p in data["products"])
+    assert_images(data["products"])
 
 
 async def test_tl_search(client):
@@ -14,6 +16,9 @@ async def test_tl_search(client):
     prices = [p["final_price"] for p in data["products"]]
     assert prices and prices == sorted(prices) and prices[0] > 0
     assert data["categories"] and data["brands"]
+    assert_images(data["products"])
+    for p in data["products"][:3]:
+        await assert_image_served(p["image"])
 
 
 async def test_tl_find_cheapest(client):
@@ -23,6 +28,7 @@ async def test_tl_find_cheapest(client):
     prices = [p["final_price"] for p in data["products"]]
     assert prices and prices == sorted(prices) and prices[0] > 0
     assert all(p["in_stock"] for p in data["products"])
+    assert_images(data["products"])
 
 
 async def test_tl_find_brand(client):

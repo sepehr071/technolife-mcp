@@ -87,3 +87,15 @@ def api(monkeypatch):
 async def client():
     async with Client(mcp, raise_exceptions=True) as c:
         yield c
+
+
+def assert_images(products: list[dict]) -> None:
+    """Every product carries an absolute https image URL."""
+    assert products and all((p.get("image") or "").startswith("https://") for p in products), products
+
+
+async def assert_image_served(url: str) -> None:
+    """The image URL answers 200 with an image content type."""
+    async with httpx.AsyncClient(trust_env=False, timeout=30) as c:
+        r = await c.get(url)
+    assert r.status_code == 200 and r.headers["content-type"].startswith("image/"), (url, r.status_code)

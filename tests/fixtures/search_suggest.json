@@ -5,15 +5,18 @@
    "products": [
     {
      "name": "گوشی موبایل اپل مدل iPhone 16 CH/A ظرفیت 128 گیگابایت رم 8 گیگابایت رجیستر شده",
-     "code": "TLP-69610"
+     "code": "TLP-69610",
+     "image": "/image/small_product-TLP-69610_0000.png"
     },
     {
      "name": "کاور مدل سیلیکونی پاک کنی مناسب برای گوشی موبایل اپل IPHONE 16",
-     "code": "TLP-239801"
+     "code": "TLP-239801",
+     "image": "/image/small_product-TLP-239801_0000.png"
     },
     {
      "name": "قاب گوشی اپل iPhone 16 Pro Max مک کوی مدل Enormous چرمی مگ‌ سیف دار",
-     "code": "TLP-73148"
+     "code": "TLP-73148",
+     "image": "/image/small_product-TLP-73148_0000.png"
     }
    ]
   }

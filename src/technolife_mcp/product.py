@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 from .http import ApiError, GraphQLError, gql
 from .info import html_text
 from .registry import tool
-from .search import card, expired, ms_to_iso, product_url, rating
+from .search import card, expired, image_url, ms_to_iso, product_url, rating
 
 ProductCode = Annotated[
     str,
@@ -27,14 +27,14 @@ OFFER_FIELDS = (
 )
 PRODUCT = (
     "query get_product_page ($code: String) { get_product_page (code: $code) { has_insurance "
-    "product_info { _id code title model is_available score_avg score_count category { code name } brand { name enName code } } "
+    "product_info { _id code title model main_image { image } sub_images { image }  is_available score_avg score_count category { code name } brand { name enName code } } "
     f"seller_items_component {{ color {{ value }} seller_items {{ {OFFER_FIELDS} }} "
     "cluster_seller_items { cluster_type { name } seller_items { _id seller_code price discounted_price available } } } "
     "configurations_component { title info { item value } } } }"
 )
 COMPARE = (
     "query get_compare_page ($products: [String]) { get_compare_page (products: $products) { category { name code } "
-    "products { name code score_avg score_count normal_price discounted_price discount available } config_table { title items { name values } } } }"
+    "products { name code image score_avg score_count normal_price discounted_price discount available } config_table { title items { name values } } } }"
 )
 COMMENTS = (
     "query get_product_comments ($code: String, $filter: CommentFilter!) { get_product_comments (code: $code, filter: $filter) { "
@@ -46,7 +46,7 @@ SUMMARY = (
 )
 BASKET = (
     "query get_basket_notLogin ($items: [BasketItem]) { get_basket_notLogin (items: $items) { "
-    "products { _id insurance_count insurance_price count max_valid_count code price discount discounted_price color { value } "
+    "products { _id image insurance_count insurance_price count max_valid_count code price discount discounted_price color { value } "
     "guarantee seller title stock_text cluster_type } purchase_box { price final_price discount insurance_bill } } }"
 )
 
@@ -99,12 +99,20 @@ async def tl_product(
         o["installment_price"] = cluster_prices.get((o["seller_item_id"], "installment"))
         o["bnpl_price"] = cluster_prices.get((o["seller_item_id"], "bnpl"))
     brand = info.get("brand") or {}
+    # main_image is null on some products; the gallery then starts with the main photo.
+    images = [
+        u
+        for u in (image_url((i or {}).get("image")) for i in [info.get("main_image"), *(info.get("sub_images") or [])])
+        if u
+    ]
     result: dict[str, Any] = {
         "code": info.get("code"),
         "id": info.get("_id"),
         "title": info.get("title"),
         "model": info.get("model"),
         "url": product_url(info.get("code")),
+        "image": images[0] if images else None,
+        "images": images[:4],
         "brand": brand.get("name"),
         "brand_en": brand.get("enName"),
         "category": (info.get("category") or {}).get("name"),
@@ -292,6 +300,7 @@ async def tl_price_basket(
                 "seller_item_id": p.get("_id"),
                 "code": p.get("code"),
                 "title": p.get("title"),
+                "image": image_url(p.get("image")),
                 "color": (p.get("color") or {}).get("value"),
                 "seller": p.get("seller"),
                 "guarantee": p.get("guarantee"),

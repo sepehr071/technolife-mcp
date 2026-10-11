@@ -63,7 +63,8 @@
         "discounted_price": 2719000,
         "marketing_group": "تکنوآف",
         "available": 163,
-        "deadline": "1792688520000"
+        "deadline": "1792688520000",
+        "image": "/image/small_product-TLP-21162_0000.png"
        },
        {
         "name": "گوشی موبايل سامسونگ Galaxy A26 5G ظرفیت 128 گیگابایت رم 6 گیگابایت - ویتنام",
@@ -73,7 +74,8 @@
         "discounted_price": null,
         "marketing_group": null,
         "available": 10,
-        "deadline": null
+        "deadline": null,
+        "image": "/image/small_product-TLP-99215_0000.png"
        },
        {
         "name": "سکه پارسیان 30 سوت 18 عیار طلا پارسس مدل GZ001",
@@ -83,7 +85,8 @@
         "discounted_price": 794390,
         "marketing_group": "تکنوآف",
         "available": 83,
-        "deadline": "1785288000000"
+        "deadline": "1785288000000",
+        "image": "/image/small_product-TLP-168926_0000.png"
        },
        {
         "name": "فر کننده مو شیگلم مدل It-Curl One-Touch Instant Curler سایز 25 میلی متر",
@@ -93,7 +96,8 @@
         "discounted_price": 2850000,
         "marketing_group": "تکنوآف",
         "available": 1022,
-        "deadline": "1775558700000"
+        "deadline": "1775558700000",
+        "image": "/image/small_product-TLP-107387_0000.png"
        }
       ]
      },

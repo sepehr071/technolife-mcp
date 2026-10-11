@@ -52,6 +52,7 @@ async def test_tl_category_products(client, api):
     }
     data = (await client.call_tool("tl_category_products", args)).structured_content
     assert data["total"] == 258
+    assert all(p["image"].startswith("https://www.technolife.com/image/") for p in data["products"])
     first = data["products"][0]
     # category lists send discounted_price null when there is no discount
     assert (

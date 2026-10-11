@@ -12,7 +12,8 @@
      "score_count": 45,
      "score_avg": 4.177777777777778,
      "available": 3000,
-     "marketing_group": null
+     "marketing_group": null,
+     "image": "/image/small_product-TLP-60492_0000.png"
     },
     {
      "name": "لپ تاپ لنوو 15.3 اینچی مدل IdeaPad Slim 3 i5 13420H 16GB 512GB",
@@ -24,7 +25,8 @@
      "score_count": 35,
      "score_avg": 3.914285714285714,
      "available": 3000,
-     "marketing_group": "تکنوآف"
+     "marketing_group": "تکنوآف",
+     "image": "/image/small_product-TLP-133524_0000.png"
     },
     {
      "name": "لپ تاپ لنوو 15.6 اینچی مدل V15 G4 i5 13420H 16GB 512GB SSD",
@@ -36,7 +38,8 @@
      "score_count": 36,
      "score_avg": 4.083333333333333,
      "available": 3000,
-     "marketing_group": null
+     "marketing_group": null,
+     "image": "/image/small_product-TLP-49420_0000.png"
     }
    ],
    "sellers_info": {

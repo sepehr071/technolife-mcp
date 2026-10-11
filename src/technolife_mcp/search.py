@@ -54,7 +54,7 @@ ORDERING = {
 Sort = Literal["relevance", "best_selling", "cheapest", "most_expensive", "newest", "biggest_discount_toman"]
 
 CARD_FIELDS = (
-    "name code normal_price discount discounted_price deadline score_count score_avg available marketing_group"
+    "name code image normal_price discount discounted_price deadline score_count score_avg available marketing_group"
 )
 SEARCH = (
     "query search_page_results ($text: String!, $filter: filter_obj) { search_page_results (text: $text, filter: $filter) { "
@@ -71,13 +71,18 @@ async def tl_suggest(query: Query) -> dict[str, Any]:
     """
     data = await gql(
         "searchapi",
-        "query search ($text: String!) { search (text: $text) { pages { text url } products { name code } } }",
+        "query search ($text: String!) { search (text: $text) { pages { text url } products { name code image } } }",
         {"text": query},
     )
     s = data.get("search") or {}
     return {
         "products": [
-            {"code": p.get("code"), "title": p.get("name"), "url": product_url(p.get("code"))}
+            {
+                "code": p.get("code"),
+                "title": p.get("name"),
+                "image": image_url(p.get("image")),
+                "url": product_url(p.get("code")),
+            }
             for p in s.get("products") or []
         ],
         "pages": [{"title": p.get("text"), "url": p.get("url")} for p in s.get("pages") or []],
@@ -248,6 +253,7 @@ def card(p: dict[str, Any]) -> dict[str, Any]:
     return {
         "code": p.get("code"),
         "title": p.get("name"),
+        "image": image_url(p.get("image")),
         "final_price": final,
         "price": price,
         "discount_pct": round(100 * (price - final) / price) if price and final < price else 0,
@@ -286,6 +292,11 @@ def expired(value: Any) -> bool:
 def ms_to_iso(value: Any) -> str | None:
     d = deadline(value)
     return d.astimezone(timezone.utc).isoformat(timespec="minutes") if d else None
+
+
+def image_url(path: str | None) -> str | None:
+    """Image fields are site-relative paths ('/image/...'); make them absolute https URLs."""
+    return f"{BASE}{path}" if path and path.startswith("/") else path or None
 
 
 def product_url(code: str | None) -> str | None:

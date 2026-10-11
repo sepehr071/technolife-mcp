@@ -55,7 +55,8 @@
         "discounted_price": 66700000,
         "marketing_group": "تکنوآف",
         "available": 144,
-        "deadline": "1792668900000"
+        "deadline": "1792668900000",
+        "image": "/image/small_product-TLP-167567_0000.png"
        },
        {
         "name": "گوشی موبايل سامسونگ گلکسی A55 5G ظرفیت 256 گیگابایت رم 8 گیگابایت - ویتنام",
@@ -65,7 +66,8 @@
         "discounted_price": 106990000,
         "marketing_group": "تکنوآف",
         "available": 5,
-        "deadline": "1792666440000"
+        "deadline": "1792666440000",
+        "image": "/image/small_product-TLP-31023_0000.png"
        },
        {
         "name": "گوشی موبایل اپل مد‌ل iPhone 17 CH/A ظرفیت 256 گیگابایت رم 8 گیگابایت - Not Active رجیستر شده به همراه شارژر دیواری اپل 20 وات مدل 3 پین B/A - اورجینال",
@@ -75,7 +77,8 @@
         "discounted_price": 359999000,
         "marketing_group": "تکنوآف",
         "available": 1,
-        "deadline": "1792664640000"
+        "deadline": "1792664640000",
+        "image": "/image/small_product-TLP-586168_0000.png"
        }
       ]
      }
@@ -99,7 +102,8 @@
         "discounted_price": 14495000,
         "marketing_group": "تکنو تایم",
         "available": 3,
-        "deadline": "1791023419127"
+        "deadline": "1791023419127",
+        "image": "/image/small_product-TLP-175987_0000.png"
        },
        {
         "name": "چراغ اضطراری شارژی مدل ny-9808B",
@@ -109,7 +113,8 @@
         "discounted_price": 1700000,
         "marketing_group": "تکنو تایم",
         "available": 3,
-        "deadline": "1791023419127"
+        "deadline": "1791023419127",
+        "image": "/image/small_product-TLP-511242_0000.png"
        },
        {
         "name": "کابل HDMI بنیوس مدل BE-HD01 طول 2 متر",
@@ -119,7 +124,8 @@
         "discounted_price": 1100000,
         "marketing_group": "تکنو تایم",
         "available": 19,
-        "deadline": "1791023419127"
+        "deadline": "1791023419127",
+        "image": "/image/small_product-TLP-430671_0000.png"
        }
       ]
      }
@@ -143,7 +149,8 @@
         "discounted_price": null,
         "marketing_group": null,
         "available": 6,
-        "deadline": null
+        "deadline": null,
+        "image": "/image/small_product-TLP-313735_0000.png"
        },
        {
         "name": "لپ تاپ اچ پی 15.6 اینچی مدل Victus 15 FA2082WM i5 13420H 16GB 512GB RTX4050",
@@ -153,7 +160,8 @@
         "discounted_price": null,
         "marketing_group": null,
         "available": 4,
-        "deadline": null
+        "deadline": null,
+        "image": "/image/small_product-TLP-239877_0000.png"
        },
        {
         "name": "لپ تاپ لنوو 15.6 اینچی مدل V15 G4 i5 13420H 16GB 512GB SSD",
@@ -163,7 +171,8 @@
         "discounted_price": null,
         "marketing_group": null,
         "available": 3,
-        "deadline": null
+        "deadline": null,
+        "image": "/image/small_product-TLP-49420_0000.png"
        }
       ]
      }
