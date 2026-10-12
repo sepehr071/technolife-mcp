@@ -2,13 +2,13 @@
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/sepehr071/technolife-mcp/main/.github/banner.png" alt="technolife-mcp: let your AI agent compare every seller on Technolife" width="100%">
+<img src="https://raw.githubusercontent.com/sepehr071/technolife-mcp/main/.github/banner.png" alt="technolife-mcp: unofficial Technolife MCP server for Claude, Cursor and Copilot" width="100%">
 
-# 📱 technolife-mcp
+# technolife-mcp: Technolife MCP server for AI agents
 
-**Let your AI agent shop around on Technolife.**<br>
-Search phones, laptops and appliances, compare every seller's cash and installment price,<br>
-read specs and reviews, and catch today's deals, all from Claude, Cursor or Copilot.
+**Let your AI agent shop around on Technolife (تکنولایف).**<br>
+An unofficial, read-only MCP server for the Iranian electronics store: search phones, laptops and appliances,<br>
+compare every seller's cash and installment price, read specs and reviews, and catch today's deals, all from Claude, Cursor or Copilot.
 
 [![PyPI](https://img.shields.io/pypi/v/technolife-mcp?color=2563eb)](https://pypi.org/project/technolife-mcp/)
 [![Python](https://img.shields.io/pypi/pyversions/technolife-mcp)](https://pypi.org/project/technolife-mcp/)
@@ -19,11 +19,25 @@ read specs and reviews, and catch today's deals, all from Claude, Cursor or Copi
 [![Install in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=technolife&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJ0ZWNobm9saWZlLW1jcCJdfQ==)
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_technolife--mcp-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=technolife&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22technolife-mcp%22%5D%7D)
 
-[Quick start](#quick-start) · [What it can do](#what-it-can-do) · [Tools](#tools) · [FAQ](#faq) · [فارسی](#فارسی)
+[For AI agents](#for-ai-agents) · [Quick start](#quick-start) · [What it can do](#what-it-can-do) · [Tools](#tools) · [FAQ](#faq) · [فارسی](#فارسی)
 
 </div>
 
 ---
+
+## For AI agents
+
+- **What:** unofficial MCP server for Technolife (technolife.com, Iran), an electronics retailer. Queries in Persian match best; prices in Toman.
+- **Install:** `uvx technolife-mcp` or `claude mcp add technolife -- uvx technolife-mcp`. Transport: stdio. Needs [uv](https://docs.astral.sh/uv/getting-started/installation/) (Python 3.10+).
+- **Auth:** none, no API key or account. Optional `TECHNOLIFE_MCP_PROXY` (HTTP proxy for every request).
+- **Access:** read-only. No login, basket saving, orders or payment, so no confirmation is needed before calling any tool.
+- **Tools:** 19, all prefixed `tl_`. Start with `tl_find_cheapest`, `tl_search`, `tl_suggest`, `tl_deals`.
+  Typical sequence: `tl_suggest` -> `tl_product` -> `tl_price_basket`.
+- **Use when:** comparing sellers, cash and installment prices, specs or reviews of electronics on Technolife.
+- **Do not use when:** the user wants to place an order, or needs shipping cost (not available without a logged-in address).
+- **Output:** compact JSON. Prices in Toman (`final_price` after discount), ratings 0-5, dates Jalali. Product codes like `TLP-60492` and seller codes like `TLS-15172` pass between tools.
+- **Machine-readable:** [`server.json`](https://github.com/sepehr071/technolife-mcp/blob/main/server.json) and the
+  [awesome-iran-mcp catalog](https://github.com/sepehr071/awesome-iran-mcp) (`TOOLS.md`, `servers.json`, `llms.txt`).
 
 ## Why
 
@@ -207,6 +221,27 @@ All 19 tools are annotated `readOnlyHint: true` and return compact structured JS
 ## FAQ
 
 <details>
+<summary><b>Is there a Technolife API or MCP server for AI agents?</b></summary>
+
+Yes: `technolife-mcp` is an unofficial MCP server with 19 read-only tools for search, seller and installment prices,
+specs, reviews and deals. It calls the same public endpoints the technolife.com website uses; no API key is needed.
+</details>
+
+<details>
+<summary><b>How do I use Technolife with Claude, Cursor or Copilot?</b></summary>
+
+Add the server with `claude mcp add technolife -- uvx technolife-mcp` (or the matching config in
+[Quick start](#quick-start) for Claude Desktop, Cursor and VS Code), then ask in plain language, in Persian or English.
+</details>
+
+<details>
+<summary><b>Is it official, safe and free?</b></summary>
+
+It is unofficial and not affiliated with Technolife. It is read-only (no login, basket or payment), runs on your
+machine, and is free under the MIT license.
+</details>
+
+<details>
 <summary><b>A phone search returns phone cases first</b></summary>
 
 Sort by price and accessories win. `tl_search` and `tl_find_cheapest` return the matching `categories` with their codes;
@@ -254,11 +289,13 @@ npx @modelcontextprotocol/inspector uvx technolife-mcp
 |---|---|---|
 | `TECHNOLIFE_MCP_PROXY` | unset | HTTP proxy for every request, e.g. `http://user:pass@host:port` |
 
-## فارسی
+<a id="فارسی"></a>
+
+## فارسی: سرور MCP تکنولایف
 
 <div dir="rtl">
 
-**technolife-mcp** به دستیار هوش مصنوعی شما (Claude، Cursor، Copilot و ...) اجازه می&zwnj;دهد در تکنولایف جستجو کند،
+**technolife-mcp** یک سرور MCP غیررسمی و فقط&zwnj;خواندنی برای تکنولایف، فروشگاه اینترنتی لوازم الکترونیکی در ایران، است. این سرور به دستیار هوش مصنوعی شما (Claude، Cursor، Copilot و ...) اجازه می&zwnj;دهد در تکنولایف جستجو کند،
 قیمت نقدی و اقساطی همه فروشندگان یک کالا را مقایسه کند، مشخصات فنی و نظرات را بخواند و تخفیف&zwnj;های فعال را پیدا کند.
 
 - فقط خواندنی است: وارد حساب نمی&zwnj;شود، سبد خرید ذخیره نمی&zwnj;کند و سفارش ثبت نمی&zwnj;کند.
@@ -298,6 +335,12 @@ and fixes for API changes.
 Releases: bump the version in `pyproject.toml` and `server.json`, then push a `v*` tag. GitHub Actions tests,
 publishes to PyPI and the [MCP Registry](https://registry.modelcontextprotocol.io), and creates the GitHub Release.
 
+## Related servers
+
+- [Digikala MCP server](https://github.com/sepehr071/digikala-mcp) for Iran's largest online store
+- [MasterKala MCP server](https://github.com/sepehr071/masterkala-mcp) for gadgets and phone accessories
+- [awesome-iran-mcp](https://github.com/sepehr071/awesome-iran-mcp): catalog of all Iranian-service MCP servers
+
 ## Disclaimer
 
 Unofficial and not affiliated with or endorsed by Technolife. It uses the public endpoints of the technolife.com
@@ -306,3 +349,5 @@ website, which can change without notice. Please keep request rates reasonable.
 ## License
 
 [MIT](https://github.com/sepehr071/technolife-mcp/blob/main/LICENSE)
+
+If this saves you clicks, a star helps others find it.
