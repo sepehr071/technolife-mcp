@@ -57,7 +57,8 @@ async def test_tl_category_products(client, api):
     # category lists send discounted_price null when there is no discount
     assert (
         first["code"] == "TLP-33392"
-        and first["final_price"] == first["price"] == 101000000
+        and first["final_price"] == 101000000
+        and "price" not in first  # no discount: price would repeat final_price
         and first["discount_pct"] == 0
     )
     assert variables(api.calls[0]) == {

@@ -19,15 +19,14 @@ async def tl_store_info(
     topic: Annotated[
         Literal["branches", "shipping", "returns", "payment_methods"],
         Field(
-            description="branches (physical stores, hours, phones), shipping (methods and costs), returns (7-day return guarantee), payment_methods (online, in store, installments)."
+            description="branches (stores, hours, phones), shipping (methods, costs), returns (7-day guarantee), payment_methods."
         ),
     ],
 ) -> dict[str, Any]:
     """Read one of Technolife's info pages as plain text.
 
-    Use for questions about physical stores, how and how much shipping costs per city,
-    returns and how to pay. Exact shipping cost of an order needs a logged-in address,
-    so quote the rules from here. For other questions try tl_faq.
+    Use for stores, shipping rules per city, returns and payment. Exact shipping cost needs a
+    logged-in address, so quote the rules. For other questions try tl_faq.
     """
     data = await gql(
         "shop_static_page",
@@ -47,14 +46,11 @@ async def tl_store_info(
 
 @tool("Search FAQ")
 async def tl_faq(
-    query: Annotated[
-        str, Field(min_length=2, description="One or two Persian words, e.g. 'ارسال', 'اقساط', 'مرجوعی', 'گارانتی'.")
-    ],
+    query: Annotated[str, Field(min_length=2, description="One or two Persian words, e.g. 'ارسال', 'اقساط'.")],
 ) -> dict[str, Any]:
     """Search Technolife's help-center FAQ and return matching questions with plain-text answers.
 
-    Use for policy questions (installments, delivery, returns, warranty, invoices). Short
-    single words match best; an empty list means try another word or tl_store_info.
+    Use for policy questions. Single words match best; an empty list means try another word or tl_store_info.
     """
     data = await gql(
         "shop_customer",
@@ -73,6 +69,7 @@ async def tl_faq(
 async def tl_shop_reviews(
     page: Annotated[int, Field(ge=0, le=100, description="Zero-based page number, newest first.")] = 0,
     limit: Annotated[int, Field(ge=1, le=50, description="Reviews per page.")] = 10,
+    full_text: FullText = False,
 ) -> dict[str, Any]:
     """Read customer reviews of the Technolife shop itself (service, delivery), newest first, rating 1-5, with staff replies.
 
@@ -93,8 +90,8 @@ async def tl_shop_reviews(
                 "date": c.get("date_added"),
                 "author": c.get("name"),
                 "rating": c.get("score"),
-                "text": c.get("body"),
-                "reply": html_text((c.get("answer") or {}).get("body")) or None,
+                "text": clip(c.get("body"), full=full_text),
+                "reply": clip(html_text((c.get("answer") or {}).get("body")), full=full_text) or None,
             }
             for c in d.get("comments") or []
         ],
@@ -107,15 +104,14 @@ async def tl_find_location(
         str,
         Field(
             min_length=2,
-            description="Address, street or landmark, Persian works best, e.g. 'میدان ونک' or 'شیراز خیابان زند'.",
+            description="Address or landmark, Persian works best, e.g. 'میدان ونک'.",
         ),
     ],
     limit: Annotated[int, Field(ge=1, le=20, description="Max places to return.")] = 5,
 ) -> dict[str, Any]:
     """Turn an address or landmark into coordinates with its province and city.
 
-    Use to tell which city an address is in (shipping methods depend on the city, see
-    tl_store_info topic=shipping) or to find the nearest branch.
+    Use to find an address's city (shipping depends on it, see tl_store_info topic=shipping) or the nearest branch.
     """
     body = await fetch(f"{BASE}/map_forward", {"search_text": query})
     _check_map(body)
@@ -140,12 +136,12 @@ async def tl_find_location(
 
 @tool("Describe coordinates")
 async def tl_reverse_geocode(
-    lat: Annotated[float, Field(ge=24, le=40, description="Latitude (Iran: ~25 to ~40), e.g. 35.7575.")],
-    long: Annotated[float, Field(ge=44, le=64, description="Longitude (Iran: ~44 to ~63), e.g. 51.4106.")],
+    lat: Annotated[float, Field(ge=24, le=40, description="Latitude, e.g. 35.7575.")],
+    long: Annotated[float, Field(ge=44, le=64, description="Longitude, e.g. 51.4106.")],
 ) -> dict[str, Any]:
     """Describe coordinates as an address with province, city and neighbourhood.
 
-    Use to confirm a delivery point with the user, or to get the city for shipping rules.
+    Use to confirm a delivery point or get the city for shipping rules.
     """
     body = await fetch(f"{BASE}/map_reverse", {"location": f"{long},{lat}"})  # lng,lat order
     _check_map(body)
@@ -184,6 +180,14 @@ class _Text(HTMLParser):
 
     def handle_data(self, data: str) -> None:
         self.parts.append(data)
+
+
+FullText = Annotated[bool, Field(description="Return review and reply text uncut (default cuts at 400 characters).")]
+
+
+def clip(text: str | None, limit: int = 400, full: bool = False) -> str | None:
+    """Cap untrusted user text (reviews, replies); a marker shows it was cut."""
+    return text if full or text is None or len(text) <= limit else text[:limit] + "…[truncated]"
 
 
 def html_text(html: str | None) -> str:

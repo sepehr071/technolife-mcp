@@ -41,6 +41,15 @@ async def test_tl_shop_reviews(client, api):
     assert data["reviews"][1]["reply"].startswith("مرجی عزیز")
 
 
+async def test_tl_shop_reviews_full_text(client, api):
+    body = fixture("shop_reviews.json")
+    body["data"]["get_article_comments"]["comments"][0]["body"] = "x" * 900
+    api["get_article_comments"] = body
+    cut = (await client.call_tool("tl_shop_reviews", {})).structured_content
+    full = (await client.call_tool("tl_shop_reviews", {"full_text": True})).structured_content
+    assert cut["reviews"][0]["text"].endswith("[truncated]") and full["reviews"][0]["text"] == "x" * 900
+
+
 async def test_tl_find_location(client, api):
     api["/map_forward"] = fixture("map_forward.json")
     data = (await client.call_tool("tl_find_location", {"query": "میدان ونک"})).structured_content

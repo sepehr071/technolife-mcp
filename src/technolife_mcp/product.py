@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import asyncio
+import time
 from typing import Annotated, Any, Literal
 
 from mcp.server.mcpserver.exceptions import ToolError
 from pydantic import BaseModel, Field
 
 from .http import ApiError, GraphQLError, gql
-from .info import html_text
+from .info import FullText, clip, html_text
 from .registry import tool
 from .search import card, expired, image_url, ms_to_iso, product_url, rating
 
@@ -17,7 +18,7 @@ ProductCode = Annotated[
     str,
     Field(
         pattern=r"^(TLP-)?\d{1,9}$",
-        description="Product code from a search or list, e.g. 'TLP-60492' (the bare number works too).",
+        description="Product code, e.g. 'TLP-60492' (bare number works).",
     ),
 ]
 
@@ -65,15 +66,13 @@ REVIEW_SORT = {
 @tool("Product details")
 async def tl_product(
     product_code: ProductCode,
-    include_specs: Annotated[bool, Field(description="Include the full spec table (adds a few KB).")] = True,
+    include_specs: Annotated[bool, Field(description="Include the spec table (a few KB).")] = True,
 ) -> dict[str, Any]:
     """Get one product's offers: price per color, seller and warranty, stock, delivery time, insurance and installment prices.
 
-    Use after tl_search / tl_suggest to answer "where is it cheapest, which color, which
-    warranty, when does it ship, how much in installments". offers are cheapest cash price
-    first; installment_price and bnpl_price are the same seller item in the installment (LOAN)
-    and buy now pay later (BNPL) price lists, null if not offered. Pass seller_item_id to
-    tl_price_basket for a final total.
+    Use after tl_search / tl_suggest. offers are cheapest cash price first; installment_price
+    and bnpl_price are the same seller item in the installment (LOAN) and buy now pay later
+    (BNPL) price lists, null if not offered. Pass seller_item_id to tl_price_basket for a final total.
     """
     code = tlp(product_code)
     try:
@@ -142,8 +141,7 @@ async def tl_compare(
     """Compare 2-5 products side by side: price, stock, rating and every spec.
 
     specs is {section: {spec: values}} with one value per product, in the order of `products`;
-    specs no product fills are left out. Products of the same category compare best. For sellers and colors
-    of one product use tl_product.
+    empty specs are left out. Same-category products compare best. For sellers and colors use tl_product.
     """
     codes = [tlp(c) for c in product_codes]
     try:
@@ -167,6 +165,25 @@ async def tl_compare(
     }
 
 
+_NEWEST_500: dict[str, tuple[float, dict]] = {}  # product code -> (fetched at, comments response)
+_NEWEST_500_TTL = 90
+_NEWEST_500_MAX = 64
+
+
+async def newest_500(code: str) -> dict:
+    """The newest 500 reviews, cached briefly so paging a rating sort does not refetch them."""
+    hit = _NEWEST_500.get(code)
+    if hit and time.monotonic() - hit[0] < _NEWEST_500_TTL:
+        return hit[1]
+    data = await gql(
+        "comment", COMMENTS, {"code": code, "filter": {"limit": 500, "skip": 0, "sort": REVIEW_SORT["newest"]}}
+    )
+    if len(_NEWEST_500) >= _NEWEST_500_MAX:
+        _NEWEST_500.clear()
+    _NEWEST_500[code] = (time.monotonic(), data)
+    return data
+
+
 @tool("Product reviews")
 async def tl_reviews(
     product_code: ProductCode,
@@ -175,22 +192,24 @@ async def tl_reviews(
     ] = "newest",
     page: Annotated[int, Field(ge=0, le=100, description="Zero-based page number.")] = 0,
     limit: Annotated[int, Field(ge=1, le=50, description="Reviews per page.")] = 10,
+    full_text: FullText = False,
 ) -> dict[str, Any]:
     """Read customer reviews of a product: average 0-5, star distribution, AI summary with pros/cons, and the reviews.
 
-    Use as a quality check before recommending a product. sort=lowest_rated surfaces
-    complaints. The AI summary (null for products with few reviews) comes on page 0 only.
-    The rating sorts rank the newest 500 reviews, newest first within a rating.
+    Use as a quality check before recommending; sort=lowest_rated surfaces complaints. Review
+    text is cut at 400 characters unless full_text=true. The AI summary (null for few reviews) comes on page 0 only.
+    The rating sorts rank the newest 500 reviews.
     """
     code = tlp(product_code)
     by_score = sort in ("highest_rated", "lowest_rated")
     if by_score:
         # The API's score order shuffles equal scores between calls, so its pages overlap.
         # ponytail: rank the newest 500 locally; page the API by date if older reviews matter
-        flt = {"limit": 500, "skip": 0, "sort": REVIEW_SORT["newest"]}
+        first = newest_500(code)
     else:
         flt = {"limit": limit, "skip": page, "sort": REVIEW_SORT[sort]}  # skip is a page index
-    calls = [gql("comment", COMMENTS, {"code": code, "filter": flt})]
+        first = gql("comment", COMMENTS, {"code": code, "filter": flt})
+    calls = [first]
     if page == 0:
         calls.append(gql("comment", SUMMARY, {"code": code}))
     results = await asyncio.gather(*calls)
@@ -210,12 +229,14 @@ async def tl_reviews(
                 "date": c.get("date"),
                 "author": c.get("name"),
                 "rating": c.get("score"),
-                "text": c.get("text"),
+                "text": clip(c.get("text"), full=full_text),
                 "pros": c.get("pros") or [],
                 "cons": c.get("cons") or [],
                 "likes": c.get("likes"),
                 "dislikes": c.get("dislikes"),
-                "replies": [html_text(a["body"]) for a in c.get("answers") or [] if a.get("body")],
+                "replies": [
+                    clip(html_text(a["body"]), full=full_text) for a in c.get("answers") or [] if a.get("body")
+                ],
             }
             for c in comments
         ],
@@ -260,10 +281,9 @@ async def tl_price_basket(
 ) -> dict[str, Any]:
     """Get the exact total for a set of seller items: discounts, insurance, quantity limits, cash vs installment price.
 
-    Prices on Technolife's server as a guest; nothing is saved, no login, no order.
-    Shipping is not included (it needs a logged-in address). max_count is the most units
-    one order may contain; over_max_count means the site will refuse that quantity.
-    Each seller_item_id may appear once: compare cash and installment in separate calls.
+    Priced as a guest; nothing is saved. max_count is the most units one order may contain;
+    over_max_count means the site refuses that quantity. Each seller_item_id may appear once:
+    compare cash and installment in separate calls.
     """
     ids = [i.seller_item_id for i in items]
     if len(set(ids)) < len(ids):

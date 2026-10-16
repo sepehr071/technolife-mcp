@@ -68,7 +68,7 @@ async def test_tl_search_relevance_keeps_api_order(client, api):
     api["search_page_results"] = fixture("search_results.json")
     data = (await client.call_tool("tl_search", {"query": "آیفون 16", "in_stock": False, "page": 2})).structured_content
     assert data["products"][0]["code"] == "TLP-69610"
-    assert data["products"][0]["deal"] is None  # some cards send an ISO deadline (2026-09-12), already past
+    assert "deal" not in data["products"][0]  # some cards send an ISO deadline (2026-09-12), already past
     sent = variables(api.calls[0])["filter"]
     assert sent["ordering"] == "kalascore" and sent["skip"] == 2 and "available" not in sent
 
@@ -79,7 +79,13 @@ async def test_tl_search_biggest_discount_resorts(client, api):
         await client.call_tool("tl_search", {"query": "آیفون 16", "sort": "biggest_discount_toman"})
     ).structured_content
     # the API order (0, 9.1M, 18.4M, 10M, 17M off) follows a lagging index
-    assert [p["price"] - p["final_price"] for p in data["products"]] == [18400000, 17000000, 10000000, 9100000, 0]
+    assert [p.get("price", p["final_price"]) - p["final_price"] for p in data["products"]] == [
+        18400000,
+        17000000,
+        10000000,
+        9100000,
+        0,
+    ]
 
 
 async def test_tl_find_cheapest(client, api):

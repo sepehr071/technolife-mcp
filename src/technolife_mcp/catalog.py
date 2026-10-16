@@ -7,7 +7,7 @@ from typing import Annotated, Any, Literal
 
 from pydantic import Field
 
-from .http import ApiError, GraphQLError, gql
+from .http import CACHE_TTL, ApiError, GraphQLError, gql
 from .registry import tool
 from .search import CARD_FIELDS, ORDERING, BrandCodes, MaxPrice, MinPrice, Page, card, resort
 
@@ -15,7 +15,7 @@ PageUrl = Annotated[
     str,
     Field(
         pattern=r"^(https://www\.technolife\.(com|ir))?/?(category|brand|promotion)/\S+$",
-        description="Page path from tl_categories / tl_find_brand / tl_campaigns, e.g. 'category/laptop-equipment/laptop', 'brand/samsung' or 'promotion/power48'.",
+        description="Page path from tl_categories / tl_find_brand / tl_campaigns, e.g. 'category/laptop-equipment/laptop', 'brand/samsung'.",
     ),
 ]
 
@@ -37,13 +37,13 @@ MAX_OPTIONS = 10
 async def tl_categories(
     query: Annotated[
         str | None,
-        Field(min_length=2, description="Find categories whose name contains this, e.g. 'لپ تاپ گیمینگ' or 'هدفون'."),
+        Field(min_length=2, description="Category name part, e.g. 'لپ تاپ گیمینگ'."),
     ] = None,
     url: Annotated[
         str | None,
         Field(
             pattern=r"^/?category/\S+$",
-            description="List the sub-pages (brands, series) of this category, e.g. 'category/mobile/mobile-phone'.",
+            description="List this category's sub-pages (brands, series), e.g. 'category/mobile/mobile-phone'.",
         ),
     ] = None,
 ) -> dict[str, Any]:
@@ -66,7 +66,7 @@ async def tl_categories(
             ]
         }
 
-    tree = (await gql("shop_tree_ts", "query { getNavBar }")).get("getNavBar") or {}
+    tree = (await gql("shop_tree_ts", "query { getNavBar }", ttl=CACHE_TTL)).get("getNavBar") or {}
     if query:
         q, found, seen = _norm(query), [], set()
 
@@ -101,11 +101,9 @@ async def tl_category_products(
     url: PageUrl,
     sort: Annotated[
         Literal["best_selling", "cheapest", "most_expensive", "newest", "biggest_discount_toman"],
-        Field(
-            description="Order; cheapest, most_expensive and biggest_discount_toman are re-sorted on the real price after discount within the page."
-        ),
+        Field(description="Order; price and discount sorts are re-sorted on the real price after discount per page."),
     ] = "best_selling",
-    in_stock: Annotated[bool, Field(description="Only products that can be ordered now.")] = True,
+    in_stock: Annotated[bool, Field(description="Only orderable products.")] = True,
     min_price: MinPrice = None,
     max_price: MaxPrice = None,
     brand_codes: BrandCodes = None,
@@ -113,14 +111,14 @@ async def tl_category_products(
         list[Annotated[int, Field(ge=1)]] | None,
         Field(
             max_length=10,
-            description="Attribute filter codes from tl_category_filters (all must match), e.g. [4447] for 16 GB RAM laptops.",
+            description="Attribute codes from tl_category_filters (all must match), e.g. [4447] (16 GB RAM).",
         ),
     ] = None,
     category_codes: Annotated[
         list[Annotated[int, Field(ge=1)]] | None,
         Field(
             max_length=10,
-            description="Category filter codes from the `categories` of tl_category_filters (brand and promotion pages), e.g. [1] for phones.",
+            description="Category codes from `categories` of tl_category_filters (brand and promotion pages), e.g. [1].",
         ),
     ] = None,
     fast_delivery: Annotated[
@@ -131,9 +129,8 @@ async def tl_category_products(
 ) -> dict[str, Any]:
     """List the products of a category, brand or promotion page with prices, discount, stock and rating.
 
-    Use to browse a product type (laptops, phones) or brand sorted by price or popularity,
-    with filters. Get brand and attribute codes (RAM, screen size, CPU...) and the price range
-    from tl_category_filters first. For free text use tl_search.
+    Use to browse a product type or brand by price or popularity. Get brand and attribute codes
+    and the price range from tl_category_filters first. For free text use tl_search.
     """
     page_url, flt = _filter_obj(url)
     flt.update({"limit": limit, "skip": page, "ordering": ORDERING[sort]})  # skip is a page index
@@ -167,9 +164,8 @@ async def tl_category_products(
 async def tl_category_filters(url: PageUrl) -> dict[str, Any]:
     """List the filters of a category, brand or promotion page: brands, categories, price range and attributes with their codes.
 
-    Use before tl_category_products to filter by brand (brand_codes), by category on brand
-    and promotion pages (category_codes) or by attributes such as RAM, screen size, CPU
-    series or usage (attribute_codes).
+    Use before tl_category_products to get brand_codes, category_codes (brand and promotion
+    pages) and attribute_codes (RAM, screen size, CPU...).
     """
     page_url, flt = _filter_obj(url)
     try:

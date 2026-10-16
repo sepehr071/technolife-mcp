@@ -101,7 +101,7 @@ async def test_tl_seller(client, api):
         ("TLP-133524", 176800000),
     ]
     assert all(p["image"].startswith("https://www.technolife.com/image/") for p in data["products"])
-    assert data["products"][2]["discount_pct"] == 0 and data["products"][2]["deal_ends"] is None
+    assert data["products"][2]["discount_pct"] == 0 and "deal_ends" not in data["products"][2]
     assert variables(api.calls[0]) == {
         "seller_codes": ["15172"],
         "filterObj": {"limit": 3, "skip": 0, "ordering": "price-asc", "available": True},

@@ -1,5 +1,5 @@
 import pytest
-from conftest import fixture, variables
+from conftest import fixture, operation, variables
 
 pytestmark = pytest.mark.anyio
 
@@ -127,6 +127,16 @@ async def test_tl_reviews_html_replies(client, api):
     assert data["reviews"][0]["replies"] == ["گزینه <موجود شد> رو فعال کنید."]
 
 
+async def test_tl_reviews_full_text(client, api):
+    body = fixture("comments.json")
+    body["data"]["get_product_comments"]["results"][0]["text"] = "y" * 900
+    api["get_product_comments"] = body
+    args = {"product_code": "TLP-69610", "page": 1}
+    cut = (await client.call_tool("tl_reviews", args)).structured_content
+    full = (await client.call_tool("tl_reviews", {**args, "full_text": True})).structured_content
+    assert cut["reviews"][0]["text"].endswith("[truncated]") and full["reviews"][0]["text"] == "y" * 900
+
+
 async def test_tl_reviews_later_page_skips_summary(client, api):
     api["get_product_comments"] = fixture("comments.json")
     data = (await client.call_tool("tl_reviews", {"product_code": "TLP-69610", "page": 1})).structured_content
@@ -203,3 +213,12 @@ async def test_tl_price_basket_insures_every_unit(client, api):
 async def test_tl_price_basket_rejects_bad_item_id(client, api):
     result = await client.call_tool("tl_price_basket", {"items": [{"seller_item_id": "TLP-60492"}]})
     assert result.is_error and not api.calls
+
+
+async def test_tl_reviews_rating_sort_pages_share_one_fetch(client, api):
+    api["get_product_comments"] = fixture("comments.json")
+    api["Get_product_review_summary"] = {"data": {"get_product_review_summary": None}}
+    for page in (0, 1):
+        args = {"product_code": "TLP-69610", "sort": "highest_rated", "page": page}
+        await client.call_tool("tl_reviews", args)
+    assert [operation(r) for r in api.calls].count("get_product_comments") == 1

@@ -9,7 +9,7 @@ import httpx
 import pytest
 from mcp import Client
 
-from technolife_mcp import http, search
+from technolife_mcp import http, product, search
 from technolife_mcp.server import mcp
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -49,6 +49,7 @@ def anyio_backend():
 def fresh_http_client():
     """The shared httpx client is bound to one event loop; each test gets a new loop."""
     http.set_transport(None)
+    product._NEWEST_500.clear()
     yield
     http.set_transport(None)
 
@@ -86,6 +87,15 @@ def api(monkeypatch):
 @pytest.fixture
 async def client():
     async with Client(mcp, raise_exceptions=True) as c:
+        call_tool = c.call_tool
+
+        async def checked(*args, **kwargs):
+            result = await call_tool(*args, **kwargs)
+            if not result.is_error:
+                result.structured_content = json.loads(result.content[0].text)
+            return result
+
+        c.call_tool = checked
         yield c
 
 

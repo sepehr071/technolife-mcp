@@ -8,7 +8,9 @@ model can act on.
 from __future__ import annotations
 
 import asyncio
+import json
 import os
+import time
 from typing import Any
 
 import httpx
@@ -26,6 +28,9 @@ MAX_CONCURRENCY = 4
 _transport: httpx.AsyncBaseTransport | None = None
 _client: httpx.AsyncClient | None = None
 _limit: asyncio.Semaphore | None = None
+_cache: dict[tuple[str, str, str], tuple[float, dict[str, Any]]] = {}
+CACHE_MAX = 16
+CACHE_TTL = 300  # nav tree and home landing change rarely
 
 
 class ApiError(ToolError):
@@ -40,6 +45,7 @@ def set_transport(transport: httpx.AsyncBaseTransport | None) -> None:
     """Swap the transport (tests use httpx.MockTransport). Drops the current client."""
     global _transport, _client, _limit
     _transport, _client, _limit = transport, None, None
+    _cache.clear()
 
 
 def _get_client() -> tuple[httpx.AsyncClient, asyncio.Semaphore]:
@@ -60,17 +66,27 @@ def _get_client() -> tuple[httpx.AsyncClient, asyncio.Semaphore]:
     return _client, _limit
 
 
-async def gql(service: str, query: str, variables: dict[str, Any] | None = None) -> dict[str, Any]:
+async def gql(service: str, query: str, variables: dict[str, Any] | None = None, *, ttl: float = 0) -> dict[str, Any]:
     """POST a GraphQL operation to `/<service>` and return its `data` object.
 
     GraphQL `errors` come with HTTP 200 (or 400 for invalid variables) and become ApiError.
+    ttl > 0 caches the answer in memory for that many seconds (keyed on all arguments); callers
+    must treat a cached result as read-only.
     """
+    key = (service, query, json.dumps(variables, sort_keys=True)) if ttl else None
+    if key and (hit := _cache.get(key)) and time.monotonic() - hit[0] < ttl:
+        return hit[1]
     body = await fetch(f"{BASE}/{service}", method="POST", json={"query": query, "variables": variables or {}})
     if not isinstance(body, dict):
         raise ApiError(f"Technolife returned an unexpected response from /{service}.")
     if body.get("errors"):
         raise GraphQLError(f"Technolife rejected the request: {_error_text(body)}")
-    return body.get("data") or {}
+    data = body.get("data") or {}
+    if key:
+        if len(_cache) >= CACHE_MAX:
+            _cache.clear()
+        _cache[key] = (time.monotonic(), data)
+    return data
 
 
 async def fetch(url: str, params: dict[str, Any] | None = None, *, method: str = "GET", json: Any = None) -> Any:

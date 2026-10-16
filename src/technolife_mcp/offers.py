@@ -9,7 +9,7 @@ from urllib.parse import unquote, urlsplit
 
 from pydantic import Field
 
-from .http import BASE, ApiError, GraphQLError, gql
+from .http import BASE, CACHE_TTL, ApiError, GraphQLError, gql
 from .registry import tool
 from .search import CARD_FIELDS, ORDERING, Page, card, resort
 
@@ -48,11 +48,10 @@ async def tl_deals(
 ) -> dict[str, Any]:
     """List current in-stock discounts (Technolife's main deal list, تکنوآف) and, on page 0, the timed home-page deals (تکنو تایم).
 
-    Use for "best deals right now". deal_ends is when the discount stops (UTC). total is the
-    size of the whole deal list, before min_discount_pct. With biggest_percent or
-    min_discount_pct each page scans the next 100 deals and returns the best `limit` of them;
-    more_on_page counts the matches cut off (raise limit to see them). For discounts inside
-    one category use tl_category_products with sort=biggest_discount_toman.
+    Use for "best deals right now". deal_ends is UTC. total is the whole deal list, before
+    min_discount_pct. With biggest_percent or min_discount_pct each page scans the next 100 deals
+    and returns the best `limit`; more_on_page counts matches cut off (raise limit). For one
+    category use tl_category_products with sort=biggest_discount_toman.
     """
     ordering = ORDERING["biggest_discount_toman" if sort == "biggest_percent" else sort]
     # biggest_percent: the API only orders by Toman amount, so take a wide page and re-sort it.
@@ -61,7 +60,7 @@ async def tl_deals(
     flt = {"limit": size, "skip": page, "ordering": ordering, "available": True}
     calls = [gql("shop_plp", SPECIAL, {"marketing_group": MAIN_DEALS, "filter": flt})]
     if page == 0:
-        calls.append(gql("shop_landing", HOME))
+        calls.append(gql("shop_landing", HOME, ttl=CACHE_TTL))
     results = await asyncio.gather(*calls)
     d = results[0].get("marketing_group_results") or {}
     deals = [
@@ -108,13 +107,13 @@ async def tl_campaigns(
 ) -> dict[str, Any]:
     """List current campaigns, or show one campaign's sections and products.
 
-    - Without code: campaign landings (code) and promotion pages (page_url) linked from the home page.
+    - Without code: campaign landings (code) and promotion pages (page_url) from the home page.
     - With code: the campaign's carousels with a few products each, and its links.
-    Pass a page_url to tl_category_products to list all of its products with filters
-    (products_in_carousel counts only the carousel, not the page).
+    Pass a page_url to tl_category_products to list all its products (products_in_carousel
+    counts only the carousel).
     """
     if code is None:
-        data = await gql("shop_landing", HOME)
+        data = await gql("shop_landing", HOME, ttl=CACHE_TTL)
         campaigns, seen = [], set()
         for s in data.get("get_landing_page") or []:
             for b in s.get("banners") or []:
@@ -150,14 +149,14 @@ async def tl_seller(
         str,
         Field(
             pattern=r"^(TLS-)?\d{1,9}$",
-            description="Seller code from tl_product offers, e.g. 'TLS-15172' (the bare number works too).",
+            description="Seller code from tl_product offers, e.g. 'TLS-15172' (bare number works).",
         ),
     ],
     sort: Annotated[
         Literal["best_selling", "cheapest", "most_expensive", "newest", "biggest_discount_toman"],
         Field(description="Order of the seller's products."),
     ] = "best_selling",
-    in_stock: Annotated[bool, Field(description="Only products that can be ordered now.")] = True,
+    in_stock: Annotated[bool, Field(description="Only orderable products.")] = True,
     page: Page = 0,
     limit: Annotated[int, Field(ge=1, le=50, description="Products per page.")] = 20,
 ) -> dict[str, Any]:
@@ -200,7 +199,7 @@ def _link(link: str | None) -> dict[str, Any] | None:
     if not link:
         return None
     parts = urlsplit(link)
-    if parts.netloc and not parts.netloc.endswith("technolife.com"):
+    if parts.netloc and parts.netloc.removeprefix("www.") not in ("technolife.com", "technolife.ir"):
         return None  # partner sites (TechnoPay, loan apps)
     path = unquote(parts.path).strip("/")
     if path.startswith("landings/"):
