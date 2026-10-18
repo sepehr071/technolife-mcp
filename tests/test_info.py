@@ -143,7 +143,7 @@ async def test_network_down_after_retry(client, api, monkeypatch):
     api["get_search_faq"] = down
     result = await client.call_tool("tl_faq", {"query": "اقساط"})
     assert result.is_error and "Could not reach www.technolife.com (ConnectError)" in result.content[0].text
-    assert len(api.calls) == 2
+    assert len(api.calls) == 3  # retried twice
     # tools that explain unknown codes or urls keep the network message as is
     api["get_menu_products"] = down
     result = await client.call_tool("tl_category_products", {"url": "brand/samsung"})

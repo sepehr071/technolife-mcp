@@ -29,7 +29,7 @@ compare every seller's cash and installment price, read specs and reviews, and c
 
 - **What:** unofficial MCP server for Technolife (technolife.com, Iran), an electronics retailer. Queries in Persian match best; prices in Toman.
 - **Install:** `uvx technolife-mcp` or `claude mcp add technolife -- uvx technolife-mcp`. Transport: stdio. Needs [uv](https://docs.astral.sh/uv/getting-started/installation/) (Python 3.10+).
-- **Auth:** none, no API key or account. Optional `TECHNOLIFE_MCP_PROXY` (HTTP proxy for every request).
+- **Auth:** none, no API key or account. Optional `TECHNOLIFE_MCP_PROXY` (HTTP proxy, or a comma-separated list, for every request).
 - **Access:** read-only. No login, basket saving, orders or payment, so no confirmation is needed before calling any tool.
 - **Tools:** 19, all prefixed `tl_`. Start with `tl_find_cheapest`, `tl_search`, `tl_suggest`, `tl_deals`.
   Typical sequence: `tl_suggest` -> `tl_product` -> `tl_price_basket`.
@@ -265,7 +265,7 @@ were not tested; if Technolife blocks one, set `TECHNOLIFE_MCP_PROXY`.
 <details>
 <summary><b>I get "did not answer in time" or "Could not reach"</b></summary>
 
-Technolife sometimes resets connections; the server retries a failed connection once (timeouts are not retried). If it keeps failing, check your connection or set
+Technolife sometimes resets connections; the server retries a failed connection, timeout, 429 or 5xx up to twice. If it keeps failing, check your connection or set
 `TECHNOLIFE_MCP_PROXY`. Normal system proxy variables are ignored on purpose, because direct calls are the fastest.
 </details>
 
@@ -287,7 +287,9 @@ npx @modelcontextprotocol/inspector uvx technolife-mcp
 
 | Variable | Default | Meaning |
 |---|---|---|
-| `TECHNOLIFE_MCP_PROXY` | unset | HTTP proxy for every request, e.g. `http://user:pass@host:port` |
+| `TECHNOLIFE_MCP_PROXY` | unset | HTTP proxy for every request, e.g. `http://user:pass@host:port`, or a comma-separated list used one at a time (the next one after a block) |
+
+If Technolife serves a bot-check page, install `technolife-mcp[browser]` and run `patchright install chromium`; a headless browser then clears the check once and the server reuses its cookies.
 
 <a id="فارسی"></a>
 
@@ -323,8 +325,8 @@ claude mcp add technolife -- uvx technolife-mcp
 ```bash
 git clone https://github.com/sepehr071/technolife-mcp && cd technolife-mcp
 uv sync
-uv run pytest            # offline, against recorded responses
-uv run pytest -m live    # real API
+uv run python -m pytest            # offline, against recorded responses
+uv run python -m pytest -m live    # real API
 uv run ruff check .
 ```
 
