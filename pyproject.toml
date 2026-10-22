@@ -1,13 +1,13 @@
 [project]
 name = "technolife-mcp"
-version = "0.4.0"
+version = "0.4.1"
 description = "Unofficial read-only MCP server for Technolife: search electronics, compare sellers and installment prices, find deals."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Sepehr Radmard", email = "sepehrr80@gmail.com" }]
 requires-python = ">=3.10"
-keywords = ["mcp", "model-context-protocol", "technolife", "iran", "electronics", "shopping", "price-comparison"]
+keywords = ["mcp", "mcp-server", "model-context-protocol", "technolife", "iran", "persian", "electronics", "shopping", "price-comparison", "ecommerce", "installment-prices", "mobile-phones", "laptops", "ai-agents"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
