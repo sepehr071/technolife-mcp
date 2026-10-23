@@ -1,6 +1,6 @@
 [project]
 name = "technolife-mcp"
-version = "0.4.1"
+version = "0.4.2"
 description = "Unofficial read-only MCP server for Technolife: search electronics, compare sellers and installment prices, find deals."
 readme = "README.md"
 license = "MIT"
