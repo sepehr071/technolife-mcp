@@ -35,6 +35,7 @@ Homepage = "https://github.com/sepehr071/technolife-mcp"
 Source = "https://github.com/sepehr071/technolife-mcp"
 Changelog = "https://github.com/sepehr071/technolife-mcp/releases"
 Issues = "https://github.com/sepehr071/technolife-mcp/issues"
+Website = "https://mcpfarsi.ir/servers/technolife/"
 
 [project.scripts]
 technolife-mcp = "technolife_mcp.server:main"

@@ -15,6 +15,7 @@ search phones, laptops and appliances, compare every seller's cash and installme
 [![CI](https://github.com/sepehr071/technolife-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/sepehr071/technolife-mcp/actions/workflows/ci.yml)
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-io.github.sepehr071%2Ftechnolife--mcp-7c3aed)](https://registry.modelcontextprotocol.io/?q=technolife-mcp)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16a34a)](https://github.com/sepehr071/technolife-mcp/blob/main/LICENSE)
+[![mcpfarsi](https://mcpfarsi.ir/badge/technolife.svg)](https://mcpfarsi.ir/servers/technolife/)
 
 [![Install in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=technolife&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJ0ZWNobm9saWZlLW1jcCJdfQ==)
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_technolife--mcp-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=technolife&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22technolife-mcp%22%5D%7D)
@@ -433,6 +434,7 @@ publishes to PyPI and the [MCP Registry](https://registry.modelcontextprotocol.i
 - [torob-mcp](https://github.com/sepehr071/torob-mcp) for price comparison across Iranian shops
 - [okala-mcp](https://github.com/sepehr071/okala-mcp) for grocery prices and delivery on Okala
 - [snapp-mcp](https://github.com/sepehr071/snapp-mcp) for Snappfood and SnappMarket food and grocery delivery
+- Listed on [mcpfarsi.ir](https://mcpfarsi.ir/servers/technolife/), the Persian MCP marketplace
 
 ## Disclaimer
 
