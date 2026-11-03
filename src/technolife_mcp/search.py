@@ -231,7 +231,7 @@ def resort(products: list[dict[str, Any]], sort: str) -> list[dict[str, Any]]:
     if sort in ("cheapest", "most_expensive"):
         products.sort(key=lambda p: p["final_price"], reverse=sort == "most_expensive")
     elif sort == "biggest_discount_toman":
-        products.sort(key=lambda p: p["final_price"] - p.get("price", p["final_price"]))
+        products.sort(key=lambda p: p["final_price"] - (p.get("price") or p["final_price"]))
     return products
 
 
@@ -252,8 +252,7 @@ def card(p: dict[str, Any]) -> dict[str, Any]:
         "rating_count": p.get("score_count"),
         "url": product_url(p.get("code")),
     }
-    if final < price:
-        out["price"] = price  # price before discount; omitted when equal to final_price
+    out["price"] = price or None  # price before discount (= final_price when not discounted); null when unpriced
     # null when absent: rating (not rated), deal and deal_ends (none or expired)
     extra = {
         "rating": rating(p.get("score_avg"), p.get("score_count")),

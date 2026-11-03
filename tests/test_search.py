@@ -131,3 +131,10 @@ async def test_tl_find_brand(client, api):
 async def test_short_query_rejected(client, api):
     result = await client.call_tool("tl_search", {"query": "a"})
     assert result.is_error and not api.calls
+
+
+def test_card_unpriced_has_null_price():
+    from technolife_mcp.search import card
+
+    c = card({"code": "TLP-1", "name": "x", "normal_price": 0, "available": False})
+    assert c["price"] is None and c["final_price"] == 0
