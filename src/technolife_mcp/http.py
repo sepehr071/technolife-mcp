@@ -167,17 +167,46 @@ async def gql(service: str, query: str, variables: dict[str, Any] | None = None,
     return data
 
 
-async def fetch(url: str, params: dict[str, Any] | None = None, *, method: str = "GET", json: Any = None) -> Any:
-    """Call an endpoint and return the parsed JSON body.
+_NEXT_DATA = re.compile(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', re.S)
+
+
+async def page_query(path: str, name: str) -> Any:
+    """The answer to GraphQL query `name` that the site rendered into the page at `path` (Next.js `__NEXT_DATA__`).
+
+    For services the site closed to the public (shop_product answers 503 since 2026-11) while its pages still render
+    the same data server-side.
+    """
+    html = await fetch(f"{BASE}{path}", text=True)
+    m = _NEXT_DATA.search(html)
+    queries = []
+    if m:
+        try:
+            queries = json.loads(m[1])["props"]["pageProps"]["dehydratedState"]["queries"]
+        except (ValueError, KeyError, TypeError):
+            pass
+    for q in queries:
+        key = q.get("queryKey") or []
+        if len(key) > 1 and isinstance(key[1], dict) and (key[1].get("query") or {}).get("__name") == name:
+            return (q.get("state") or {}).get("data")
+    raise ApiError(f"www.technolife.com changed its page layout ({name} not found on {path}).")
+
+
+async def fetch(
+    url: str, params: dict[str, Any] | None = None, *, method: str = "GET", json: Any = None, text: bool = False
+) -> Any:
+    """Call an endpoint and return the parsed JSON body (`text`: the body as text, for HTML pages).
 
     A timeout, network error, 5xx or 429 is retried up to MAX_RETRIES times with jittered exponential backoff,
-    or after Retry-After when sent (the calls are idempotent reads). Other 4xx (403 too) are never retried.
+    or after Retry-After when sent (the calls are idempotent reads). Other 4xx (403 too) are never retried, nor is a
+    Retry-After longer than MAX_RETRY_WAIT (a service closed for maintenance: shop_product sent 3600).
     """
     for attempt in range(MAX_RETRIES + 1):
         try:
-            return await _request(method, url, params, json)
+            return await _request(method, url, params, json, text)
         except ApiError as e:
             if attempt == MAX_RETRIES or (e.status is not None and e.status < 500 and e.status != 429):
+                raise
+            if e.retry_after is not None and e.retry_after > MAX_RETRY_WAIT:
                 raise
             wait = e.retry_after if e.retry_after is not None else RETRY_DELAY * 2**attempt * random.uniform(1, 1.5)
             await asyncio.sleep(min(wait, MAX_RETRY_WAIT))
@@ -247,7 +276,7 @@ async def _clear_challenge(client: httpx.AsyncClient) -> None:
         _cleared = (client, time.monotonic())
 
 
-async def _request(method: str, url: str, params: dict[str, Any] | None, json: Any) -> Any:
+async def _request(method: str, url: str, params: dict[str, Any] | None, json: Any, text: bool = False) -> Any:
     client, limit = _get_client()
     r = await _send(client, limit, method, url, params, json)
     if _is_challenge(r):
@@ -260,6 +289,8 @@ async def _request(method: str, url: str, params: dict[str, Any] | None, json: A
 
     if r.status_code >= 400:
         raise ApiError(_status_message(r), r.status_code, _retry_after(r))
+    if text:
+        return r.text
     try:
         return r.json()
     except ValueError as e:

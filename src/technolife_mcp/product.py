@@ -9,7 +9,7 @@ from typing import Annotated, Any, Literal
 from mcp.server.mcpserver.exceptions import ToolError
 from pydantic import BaseModel, Field
 
-from .http import ApiError, GraphQLError, gql
+from .http import ApiError, GraphQLError, gql, page_query
 from .info import FullText, clip, html_text
 from .registry import tool
 from .search import card, expired, image_url, ms_to_iso, product_url, rating
@@ -80,6 +80,11 @@ async def tl_product(
     except GraphQLError as e:
         # An unknown code answers a GraphQL INTERNAL_SERVER_ERROR.
         raise ApiError(f"Could not load product {code} ({e}). Check the code with tl_suggest or tl_search.") from e
+    except ApiError as e:
+        if e.status is None or e.status < 500:
+            raise
+        # The product service is closed to the public at times (503); the product page renders the same answer.
+        data = {"get_product_page": await page_query(f"/product-{code.removeprefix('TLP-')}", "get_product_page")}
     page = data.get("get_product_page") or {}
     info = page.get("product_info")
     if not info:
@@ -150,6 +155,14 @@ async def tl_compare(
         # An unknown code answers a GraphQL INTERNAL_SERVER_ERROR.
         raise ApiError(
             f"Could not compare {', '.join(codes)} ({e}). One of the codes may be wrong; check them with tl_suggest or tl_search."
+        ) from e
+    except ApiError as e:
+        if e.status is None or e.status < 500:
+            raise
+        # The site's own compare page is down too then (503 since 2026-11); tl_product still reads product pages.
+        raise ApiError(
+            f"Technolife's compare service is down (HTTP {e.status}). Call tl_product for each code and compare those.",
+            e.status,
         ) from e
     d = data.get("get_compare_page") or {}
     specs: dict[str, dict[str, list[str]]] = {}

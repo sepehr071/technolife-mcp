@@ -1,3 +1,6 @@
+import json
+
+import httpx
 import pytest
 from conftest import fixture, operation, variables
 
@@ -48,6 +51,18 @@ async def test_tl_product(client, api):
     assert p["specs"]["مشخصات فیزیکی"] == {"ابعاد": "359.3x235x17.9 میلی متر", "وزن": "1.6 کیلوگرم"}
 
 
+async def test_tl_product_reads_the_page_when_the_service_is_closed(client, api):
+    page = fixture("product_page.json")["data"]["get_product_page"]
+    queries = [{"queryKey": ["content", {"query": {"__name": "get_product_page"}}], "state": {"data": page}}]
+    next_data = json.dumps({"props": {"pageProps": {"dehydratedState": {"queries": queries}}}}, ensure_ascii=False)
+    api["get_product_page"] = lambda r: httpx.Response(503, text="<p>Temporarily unavailable.</p>")
+    api["/product-60492"] = lambda r: httpx.Response(
+        200, text=f'<html><script id="__NEXT_DATA__" type="application/json">{next_data}</script></html>'
+    )
+    p = (await client.call_tool("tl_product", {"product_code": "60492", "include_specs": False})).structured_content
+    assert p["brand_en"] == "Lenovo" and len(p["offers"]) == 3
+
+
 async def test_tl_product_unknown_code(client, api):
     api["get_product_page"] = {
         "errors": [{"message": "INTERNAL_SERVER_ERROR", "extensions": {"code": "INTERNAL_SERVER_ERROR"}}],
@@ -60,6 +75,12 @@ async def test_tl_product_unknown_code(client, api):
 async def test_tl_product_rejects_bad_code(client, api):
     result = await client.call_tool("tl_product", {"product_code": "TLS-15172"})
     assert result.is_error and not api.calls
+
+
+async def test_tl_compare_service_down_points_to_tl_product(client, api):
+    api["get_compare_page"] = lambda r: httpx.Response(503, text="down", headers={"Retry-After": "3600"})
+    result = await client.call_tool("tl_compare", {"product_codes": ["TLP-60492", "133524"]})
+    assert result.is_error and "tl_product" in result.content[0].text and len(api.calls) == 1
 
 
 async def test_tl_compare(client, api):

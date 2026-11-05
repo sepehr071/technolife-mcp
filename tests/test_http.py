@@ -48,7 +48,7 @@ async def test_retry_on_5xx_and_429_but_not_403(api):
     assert len(api.calls) == 1
 
 
-async def test_retry_after_is_honoured_and_capped(monkeypatch, api):
+async def test_retry_after_is_honoured_but_a_long_one_is_not_waited_for(monkeypatch, api):
     waits = []
 
     async def fake_sleep(s):
@@ -62,12 +62,15 @@ async def test_retry_after_is_honoured_and_capped(monkeypatch, api):
         if len(hits) == 1:
             return httpx.Response(429, json={}, headers={"Retry-After": "3"})
         if len(hits) == 2:
-            return httpx.Response(503, json={}, headers={"Retry-After": "999"})
-        return httpx.Response(200, json=OK)
+            return httpx.Response(200, json=OK)
+        return httpx.Response(503, json={}, headers={"Retry-After": "3600"})  # closed for maintenance
 
     api["op"] = limited
     await http.gql("svc", "query op { x }")
-    assert [w for w in waits if w] == [3, http.MAX_RETRY_WAIT]
+    assert [w for w in waits if w] == [3]
+    with pytest.raises(http.ApiError) as e:
+        await http.gql("svc", "query op { x }")
+    assert e.value.status == 503 and len(hits) == 3 and [w for w in waits if w] == [3]
 
 
 async def test_proxy_list_rotates_on_connect_error(monkeypatch, api):
