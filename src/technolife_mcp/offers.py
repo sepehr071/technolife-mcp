@@ -9,7 +9,7 @@ from urllib.parse import unquote, urlsplit
 
 from pydantic import Field
 
-from .http import BASE, CACHE_TTL, ApiError, GraphQLError, gql
+from .http import BASE, CACHE_TTL, ApiError, GraphQLError, closed, gql, gql_or_page, page_params
 from .registry import tool
 from .search import CARD_FIELDS, ORDERING, Page, card, resort
 
@@ -58,7 +58,17 @@ async def tl_deals(
     # min_discount_pct: filter a wide page so `limit` deals can still be found.
     size = 100 if sort == "biggest_percent" or min_discount_pct else limit
     flt = {"limit": size, "skip": page, "ordering": ordering, "available": True}
-    calls = [gql("shop_plp", SPECIAL, {"marketing_group": MAIN_DEALS, "filter": flt})]
+
+    async def deal_list() -> dict[str, Any]:
+        try:
+            return await gql("shop_plp", SPECIAL, {"marketing_group": MAIN_DEALS, "filter": flt})
+        except ApiError as e:
+            # The listing service is down (the site's own deal page fails then too); the timed deals still load.
+            if not closed(e) or page:
+                raise
+            return {"down": e.status}
+
+    calls = [deal_list()]
     if page == 0:
         calls.append(gql("shop_landing", HOME, ttl=CACHE_TTL))
     results = await asyncio.gather(*calls)
@@ -89,6 +99,10 @@ async def tl_deals(
             for c in map(card, tab.get("TabContent") or [])
             if c["in_stock"] and c["discount_pct"] >= max(min_discount_pct, 1)
         ][:limit]
+    if "down" in results[0]:
+        out["note"] = (
+            f"Technolife's main deal list is down (HTTP {results[0]['down']}); only the timed deals are listed."
+        )
     return out
 
 
@@ -167,8 +181,15 @@ async def tl_seller(
     flt: dict[str, Any] = {"limit": limit, "skip": page, "ordering": ORDERING[sort]}
     if in_stock:
         flt["available"] = True
+    code = seller_code.removeprefix("TLS-")
     try:
-        data = await gql("shop_plp", SELLER, {"seller_codes": [seller_code.removeprefix("TLS-")], "filterObj": flt})
+        data = await gql_or_page(
+            "shop_plp",
+            SELLER,
+            {"seller_codes": [code], "filterObj": flt},
+            f"/sellers/seller-{code}/x?{page_params(flt)}",  # the name in the path is not checked
+            "get_seller_product_list",
+        )
     except GraphQLError:
         data = {}  # an unknown seller answers a GraphQL "server error"
     d = data.get("get_seller_product_list") or {}

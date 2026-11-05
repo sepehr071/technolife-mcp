@@ -14,6 +14,7 @@ import random
 import re
 import time
 from typing import Any
+from urllib.parse import urlencode
 
 import httpx
 from httpx_curl_cffi import AsyncCurlTransport
@@ -173,8 +174,8 @@ _NEXT_DATA = re.compile(r'<script id="__NEXT_DATA__" type="application/json">(.*
 async def page_query(path: str, name: str) -> Any:
     """The answer to GraphQL query `name` that the site rendered into the page at `path` (Next.js `__NEXT_DATA__`).
 
-    For services the site closed to the public (shop_product answers 503 since 2026-11) while its pages still render
-    the same data server-side.
+    For services the site closed to the public (shop_product, shop_plp and shop_tree_ts answer 503 since 2026-11) while
+    its pages still render the same data server-side. A paged list gives its first rendered page.
     """
     html = await fetch(f"{BASE}{path}", text=True)
     m = _NEXT_DATA.search(html)
@@ -186,9 +187,56 @@ async def page_query(path: str, name: str) -> Any:
             pass
     for q in queries:
         key = q.get("queryKey") or []
-        if len(key) > 1 and isinstance(key[1], dict) and (key[1].get("query") or {}).get("__name") == name:
-            return (q.get("state") or {}).get("data")
-    raise ApiError(f"www.technolife.com changed its page layout ({name} not found on {path}).")
+        query = key[1].get("query") if len(key) > 1 and isinstance(key[1], dict) else None
+        # Named queries carry __name; an unnamed one (`query { getNavBar }`) is keyed by its field.
+        if isinstance(query, dict) and (query.get("__name") or next(iter(query), None)) == name:
+            data = (q.get("state") or {}).get("data")
+            if data is None:
+                break  # the site's own render of it failed
+            if isinstance(data, dict) and isinstance(data.get("pages"), list) and "pageParams" in data:
+                return data["pages"][0] if data["pages"] else {}
+            return data
+    raise ApiError(f"www.technolife.com did not render {name} on {path}; this part of the site is unavailable now.")
+
+
+# The site's list pages read their filter from the URL: filterObj key -> query parameter (the site's own mapping).
+_PAGE_PARAMS = {
+    "attribute_filters": "af",
+    "available": "only_available",
+    "available_in_stock": "send_quick",
+    "brand_filters": "manufacturer_id",
+    "category_filters": "category_id",
+    "limit": "limit",
+    "ordering": "ordering",
+    "price_max": "pto",
+    "price_min": "pfrom",
+}
+
+
+def page_params(flt: dict[str, Any]) -> str:
+    """A list filter (filterObj) as the query string of the matching site page; lists join with '_', page is skip + 1."""
+    out = {"page": flt.get("skip", 0) + 1}
+    for k, v in flt.items():
+        if k in _PAGE_PARAMS and v is not None:
+            out[_PAGE_PARAMS[k]] = "_".join(map(str, v)) if isinstance(v, list) else ("true" if v is True else v)
+    return urlencode(out)
+
+
+def closed(e: ApiError) -> bool:
+    """A service that answers 5xx: the page fallback may still have its data."""
+    return e.status is not None and e.status >= 500 and not isinstance(e, GraphQLError)
+
+
+async def gql_or_page(
+    service: str, query: str, variables: dict[str, Any] | None, path: str, name: str, *, ttl: float = 0
+) -> dict[str, Any]:
+    """`gql`, or when the service is closed the same query's answer read from the page at `path`, as {name: data}."""
+    try:
+        return await gql(service, query, variables, ttl=ttl)
+    except ApiError as e:
+        if not closed(e):
+            raise
+        return {name: await page_query(path, name)}
 
 
 async def fetch(

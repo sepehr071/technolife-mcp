@@ -7,7 +7,7 @@ from typing import Annotated, Any, Literal
 
 from pydantic import Field
 
-from .http import CACHE_TTL, ApiError, GraphQLError, gql
+from .http import CACHE_TTL, ApiError, GraphQLError, gql_or_page, page_params
 from .registry import tool
 from .search import CARD_FIELDS, ORDERING, BrandCodes, MaxPrice, MinPrice, Page, card, resort
 
@@ -54,10 +54,13 @@ async def tl_categories(
     - With neither: the top-level categories and the titles of their children (get a child's url with query).
     """
     if url:
-        data = await gql(
+        path = "/" + url.lstrip("/")
+        data = await gql_or_page(
             "shop_tree_ts",
             "query getSubBreadCrumbProductList ($url: String!) { getSubBreadCrumbProductList (url: $url) { name url } }",
-            {"url": "/" + url.lstrip("/")},
+            {"url": path},
+            path,
+            "getSubBreadCrumbProductList",
         )
         return {
             "categories": [
@@ -66,7 +69,9 @@ async def tl_categories(
             ]
         }
 
-    tree = (await gql("shop_tree_ts", "query { getNavBar }", ttl=CACHE_TTL)).get("getNavBar") or {}
+    tree = (await gql_or_page("shop_tree_ts", "query { getNavBar }", None, "/", "getNavBar", ttl=CACHE_TTL)).get(
+        "getNavBar"
+    ) or {}
     if query:
         q, found, seen = _norm(query), [], set()
 
@@ -149,7 +154,13 @@ async def tl_category_products(
     if fast_delivery:
         flt["available_in_stock"] = True
     try:
-        data = await gql("shop_plp", MENU_PRODUCTS, {"url": page_url, "filterObj": flt})
+        data = await gql_or_page(
+            "shop_plp",
+            MENU_PRODUCTS,
+            {"url": page_url, "filterObj": flt},
+            f"/{_filter_path(url)}?{page_params(flt)}",
+            "get_menu_products",
+        )
     except GraphQLError as e:
         # The site also answers this error when no product matches the price range or filters.
         filtered = min_price or max_price or brand_codes or attribute_codes or category_codes
@@ -169,7 +180,9 @@ async def tl_category_filters(url: PageUrl) -> dict[str, Any]:
     """
     page_url, flt = _filter_obj(url)
     try:
-        data = await gql("shop_plp", MENU_FILTERS, {"url": page_url, "filterObj": flt})
+        data = await gql_or_page(
+            "shop_plp", MENU_FILTERS, {"url": page_url, "filterObj": flt}, f"/{_filter_path(url)}", "get_menu_filters"
+        )
     except GraphQLError as e:
         raise ApiError(f"Could not load the filters of '{url}' ({e}). {PAGE_HINT}") from e
     out: dict[str, Any] = {"price_range": None, "brands": [], "categories": [], "attributes": []}
@@ -196,9 +209,14 @@ async def tl_category_filters(url: PageUrl) -> dict[str, Any]:
     return out
 
 
+def _filter_path(url: str) -> str:
+    """The page path of a page url, without host and slashes."""
+    return re.sub(r"^https://www\.technolife\.(com|ir)", "", url).strip("/")
+
+
 def _filter_obj(url: str) -> tuple[str, dict[str, Any]]:
     """Category/brand pages take the path; promotion pages take only the promotion code."""
-    path = re.sub(r"^https://www\.technolife\.(com|ir)", "", url).strip("/")
+    path = _filter_path(url)
     if path.startswith("promotion/"):
         return path.split("/")[1], {"page_type": "promotion"}
     return path, {"page_type": "dynamic"}

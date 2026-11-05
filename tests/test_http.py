@@ -1,4 +1,5 @@
 import asyncio
+import json
 import sys
 
 import httpx
@@ -9,6 +10,30 @@ from technolife_mcp import http
 pytestmark = pytest.mark.anyio
 
 OK = {"data": {}}
+
+
+def test_page_params_use_the_sites_url_names():
+    flt = {"page_type": "dynamic", "limit": 10, "skip": 2, "ordering": "price-asc", "available": True}
+    flt |= {"brand_filters": [16, 20], "price_max": 5}
+    assert http.page_params(flt) == "page=3&limit=10&ordering=price-asc&only_available=true&manufacturer_id=16_20&pto=5"
+
+
+async def test_gql_or_page_reads_the_rendered_page_when_the_service_is_closed(api):
+    def page(queries):
+        nd = json.dumps({"props": {"pageProps": {"dehydratedState": {"queries": queries}}}})
+        return lambda r: httpx.Response(200, text=f'<script id="__NEXT_DATA__" type="application/json">{nd}</script>')
+
+    api["op"] = lambda r: httpx.Response(503, text="down", headers={"Retry-After": "3600"})
+    api["/"] = page([{"queryKey": ["content", {"query": {"getNavBar": True}}], "state": {"data": {"children": [1]}}}])
+    assert await http.gql_or_page("svc", "query op { x }", None, "/", "getNavBar") == {"getNavBar": {"children": [1]}}
+    paged = {"pages": [{"results": [1], "count": 9}], "pageParams": [None]}
+    api["/list"] = page([{"queryKey": ["content", {"query": {"__name": "lst"}}], "state": {"data": paged}}])
+    assert await http.gql_or_page("svc", "query op { x }", None, "/list", "lst") == {
+        "lst": {"results": [1], "count": 9}
+    }
+    api["/broken"] = page([{"queryKey": ["content", {"query": {"__name": "lst"}}], "state": {"data": None}}])
+    with pytest.raises(http.ApiError, match="unavailable"):
+        await http.gql_or_page("svc", "query op { x }", None, "/broken", "lst")
 
 
 def test_is_challenge():
