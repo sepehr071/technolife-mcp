@@ -1152,7 +1152,7 @@ wheels = [
 
 [[package]]
 name = "technolife-mcp"
-version = "0.4.6"
+version = "0.5.0"
 source = { editable = "." }
 dependencies = [
     { name = "curl-cffi" },
