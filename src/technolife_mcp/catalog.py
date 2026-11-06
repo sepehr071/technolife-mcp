@@ -56,7 +56,7 @@ async def tl_categories(
     if url:
         path = "/" + url.lstrip("/")
         data = await gql_or_page(
-            "shop_tree_ts",
+            "catalog",
             "query getSubBreadCrumbProductList ($url: String!) { getSubBreadCrumbProductList (url: $url) { name url } }",
             {"url": path},
             path,
@@ -69,7 +69,7 @@ async def tl_categories(
             ]
         }
 
-    tree = (await gql_or_page("shop_tree_ts", "query { getNavBar }", None, "/", "getNavBar", ttl=CACHE_TTL)).get(
+    tree = (await gql_or_page("catalog", "query { getNavBar }", None, "/", "getNavBar", ttl=CACHE_TTL)).get(
         "getNavBar"
     ) or {}
     if query:
@@ -155,7 +155,7 @@ async def tl_category_products(
         flt["available_in_stock"] = True
     try:
         data = await gql_or_page(
-            "shop_plp",
+            "catalog",
             MENU_PRODUCTS,
             {"url": page_url, "filterObj": flt},
             f"/{_filter_path(url)}?{page_params(flt)}",
@@ -181,7 +181,7 @@ async def tl_category_filters(url: PageUrl) -> dict[str, Any]:
     page_url, flt = _filter_obj(url)
     try:
         data = await gql_or_page(
-            "shop_plp", MENU_FILTERS, {"url": page_url, "filterObj": flt}, f"/{_filter_path(url)}", "get_menu_filters"
+            "catalog", MENU_FILTERS, {"url": page_url, "filterObj": flt}, f"/{_filter_path(url)}", "get_menu_filters"
         )
     except GraphQLError as e:
         raise ApiError(f"Could not load the filters of '{url}' ({e}). {PAGE_HINT}") from e

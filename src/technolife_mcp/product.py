@@ -77,7 +77,7 @@ async def tl_product(
     code = tlp(product_code)
     try:
         data = await gql_or_page(
-            "shop_product", PRODUCT, {"code": code}, f"/product-{code.removeprefix('TLP-')}", "get_product_page"
+            "catalog", PRODUCT, {"code": code}, f"/product-{code.removeprefix('TLP-')}", "get_product_page"
         )
     except GraphQLError as e:
         # An unknown code answers a GraphQL INTERNAL_SERVER_ERROR.
@@ -147,7 +147,7 @@ async def tl_compare(
     """
     codes = [tlp(c) for c in product_codes]
     try:
-        data = await gql("shop_product", COMPARE, {"products": codes})
+        data = await gql("catalog", COMPARE, {"products": codes})
     except GraphQLError as e:
         # An unknown code answers a GraphQL INTERNAL_SERVER_ERROR.
         raise ApiError(

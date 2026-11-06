@@ -19,7 +19,7 @@ async def test_tl_deals_biggest_percent(client, api):
     assert data["deals"][0]["final_price"] == 89000000 and data["deals"][0]["deal"] == "تکنوآف"
     sent = variables(next(r for r in api.calls if "marketing_group_results" in r.content.decode()))
     assert sent == {
-        "marketing_group": "1",
+        "marketing_group": "special",
         "filter": {"limit": 100, "skip": 0, "ordering": "discount-desc", "available": True},
     }
     # timed deals come from the تکنوآف and تکنو تایم home sections; the laptop carousel has no discount

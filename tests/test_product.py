@@ -15,6 +15,7 @@ async def test_tl_product(client, api):
     api["get_product_page"] = body
     p = (await client.call_tool("tl_product", {"product_code": "60492"})).structured_content
     assert variables(api.calls[0]) == {"code": "TLP-60492"}
+    assert api.calls[0].url.path == "/catalog"  # /shop_product answers 410 since 2026-11
     assert p["title"] == "لپ تاپ لنوو 15.6 اینچی مدل IdeaPad Slim 3 i3 1315U 8GB 512GB"
     # main_image is null in the fixture: the gallery starts with the main photo, at most 4 shown
     assert p["image"].startswith("https://www.technolife.com/image/gallery-0-") and len(p["images"]) == 4

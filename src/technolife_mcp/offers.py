@@ -32,7 +32,7 @@ SELLER = (
     f"results {{ {CARD_FIELDS} }} sellers_info {{ code fa_name en_name score on_schedule faultless supply joined_duration {{ years months days }} }} count }} }}"
 )
 
-MAIN_DEALS = "1"  # /product/list/special/1, the main discount list (تکنوآف)
+MAIN_DEALS = "special"  # /product/list/special/1, the main discount list (تکنوآف)
 TIMED_SECTIONS = {"ProductTechnoOffBanner", "SpecialEventCarousel", "SpecialCarousel"}  # timed home-page deals
 
 
@@ -61,7 +61,7 @@ async def tl_deals(
 
     async def deal_list() -> dict[str, Any]:
         try:
-            return await gql("shop_plp", SPECIAL, {"marketing_group": MAIN_DEALS, "filter": flt})
+            return await gql("catalog", SPECIAL, {"marketing_group": MAIN_DEALS, "filter": flt})
         except ApiError as e:
             # The listing service is down (the site's own deal page fails then too); the timed deals still load.
             if not closed(e) or page:
@@ -184,7 +184,7 @@ async def tl_seller(
     code = seller_code.removeprefix("TLS-")
     try:
         data = await gql_or_page(
-            "shop_plp",
+            "catalog",
             SELLER,
             {"seller_codes": [code], "filterObj": flt},
             f"/sellers/seller-{code}/x?{page_params(flt)}",  # the name in the path is not checked
