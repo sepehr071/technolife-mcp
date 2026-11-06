@@ -20,7 +20,7 @@ SearchPage = Annotated[
     Field(
         ge=0,
         le=50,
-        description="Zero-based page. Relevance pages can repeat items; page with a price, newest or best_selling sort.",
+        description="Zero-based page. Relevance pages can repeat items; page with another sort.",
     ),
 ]
 MinPrice = Annotated[int | None, Field(ge=0, description="Lowest price in Toman, e.g. 50000000.")]
@@ -29,14 +29,14 @@ BrandCodes = Annotated[
     list[Annotated[int, Field(ge=1)]] | None,
     Field(
         max_length=10,
-        description="Brand codes from `brands` of a result or tl_find_brand, e.g. [16, 19].",
+        description="Codes from `brands` of a result or tl_find_brand, e.g. [16, 19].",
     ),
 ]
 CategoryCode = Annotated[
     int | None,
     Field(
         ge=1,
-        description="Category code from `categories` of tl_search / tl_find_cheapest, e.g. 1 (phones), to skip accessories.",
+        description="Code from `categories` of a result, e.g. 1 (phones), to skip accessories.",
     ),
 ]
 
@@ -64,7 +64,6 @@ SEARCH = (
 async def tl_suggest(query: Query) -> dict[str, Any]:
     """Turn a product name into Technolife product codes (typeahead, up to 30 products, no prices).
 
-    Use to resolve a name like 'آیفون 16' to codes for tl_product / tl_compare / tl_reviews.
     For prices, filters and paging use tl_search.
     """
     data = await gql(
@@ -92,7 +91,7 @@ async def tl_search(
     query: Query,
     sort: Annotated[
         Sort,
-        Field(description="Order; price and discount sorts are re-sorted on the real price after discount."),
+        Field(description="Price and discount sorts are re-sorted on the price after discount."),
     ] = "relevance",
     in_stock: Annotated[bool, Field(description="Only orderable products.")] = True,
     min_price: MinPrice = None,
@@ -104,9 +103,8 @@ async def tl_search(
 ) -> dict[str, Any]:
     """Search Technolife products with prices, discount, stock and rating.
 
-    Also returns the top matching categories and brands with filter codes: pass one back as
-    category_code (phones, not cases) or brand_codes to narrow. For the cheapest over several
-    pages use tl_find_cheapest; for one product's sellers and prices use tl_product.
+    Also returns top categories and brands with codes: pass them back as category_code or
+    brand_codes to narrow. For the lowest price use tl_find_cheapest; for sellers use tl_product.
     """
     s = await _search(query, sort, in_stock, min_price, max_price, brand_codes, category_code, page, limit)
     products = resort([card(p) for p in s.get("results") or []], sort)
@@ -123,12 +121,10 @@ async def tl_find_cheapest(
     pages: Annotated[int, Field(ge=1, le=5, description="Pages of 100 results to scan.")] = 2,
     limit: Annotated[int, Field(ge=1, le=50, description="Max products to return.")] = 20,
 ) -> dict[str, Any]:
-    """Find the cheapest in-stock products for a search, one flat list sorted by the real price after discount.
+    """Find the cheapest in-stock products for a search, one flat list sorted by the price after discount.
 
-    Use for the lowest price. Accessories and other models often match a model name: check the
-    returned `categories` and `brands`, call again with category_code and brand_codes, and check
-    titles. Prices are the site's featured offer, not always the cheapest seller: confirm with
-    tl_product, which lists every seller and installment price.
+    Accessories often match a model name: check `categories` and `brands`, then call again with
+    category_code and brand_codes. Prices are the featured offer: confirm with tl_product.
     """
     results = await asyncio.gather(
         *(
@@ -152,10 +148,8 @@ async def tl_find_brand(
 ) -> dict[str, Any]:
     """Look up a brand by its Persian name: filter code and brand page.
 
-    Pass brand_code in brand_codes of tl_search / tl_find_cheapest / tl_category_products, or
-    brand_page as the url of tl_category_products.
-    Empty list: the site spells the brand differently (هوآوی, not هواوی); take the code from the
-    `brands` facet of tl_search.
+    Pass brand_code as brand_codes, or brand_page as the url of tl_category_products.
+    Empty list: the site spells it differently (هوآوی, not هواوی); use the `brands` of tl_search.
     """
     data = await gql(
         "searchapi",

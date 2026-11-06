@@ -70,9 +70,9 @@ async def tl_product(
 ) -> dict[str, Any]:
     """Get one product's offers: price per color, seller and warranty, stock, delivery time, insurance and installment prices.
 
-    Use after tl_search / tl_suggest. offers are cheapest cash price first; installment_price
-    and bnpl_price are the same seller item in the installment (LOAN) and buy now pay later
-    (BNPL) price lists, null if not offered. Pass seller_item_id to tl_price_basket for a final total.
+    offers are cheapest cash price first; installment_price and bnpl_price are the same seller
+    item's installment and buy-now-pay-later prices (null if not offered). Pass seller_item_id
+    to tl_price_basket.
     """
     code = tlp(product_code)
     try:
@@ -142,8 +142,8 @@ async def tl_compare(
 ) -> dict[str, Any]:
     """Compare 2-5 products side by side: price, stock, rating and every spec.
 
-    specs is {section: {spec: values}} with one value per product, in the order of `products`;
-    empty specs are left out. Same-category products compare best. For sellers and colors use tl_product.
+    specs is {section: {spec: values}}, one value per product in the order of `products`.
+    Same-category products compare best. For sellers use tl_product.
     """
     codes = [tlp(c) for c in product_codes]
     try:
@@ -198,7 +198,7 @@ async def newest_500(code: str) -> dict:
 async def tl_reviews(
     product_code: ProductCode,
     sort: Annotated[
-        Literal["newest", "oldest", "highest_rated", "lowest_rated"], Field(description="Order of the reviews.")
+        Literal["newest", "oldest", "highest_rated", "lowest_rated"], Field(description="Review order.")
     ] = "newest",
     page: Annotated[int, Field(ge=0, le=100, description="Zero-based page number.")] = 0,
     limit: Annotated[int, Field(ge=1, le=50, description="Reviews per page.")] = 10,
@@ -206,9 +206,8 @@ async def tl_reviews(
 ) -> dict[str, Any]:
     """Read customer reviews of a product: average 0-5, star distribution, AI summary with pros/cons, and the reviews.
 
-    Use as a quality check before recommending; sort=lowest_rated surfaces complaints. Review
-    text is cut at 400 characters unless full_text=true. The AI summary (null for few reviews) comes on page 0 only.
-    The rating sorts rank the newest 500 reviews.
+    sort=lowest_rated surfaces complaints (rating sorts rank the newest 500 reviews). The AI
+    summary (null for few reviews) is on page 0 only.
     """
     code = tlp(product_code)
     by_score = sort in ("highest_rated", "lowest_rated")
@@ -271,14 +270,14 @@ class BasketItem(BaseModel):
         str,
         Field(
             pattern=r"^[0-9a-f]{24}$",
-            description="seller_item_id from tl_product offers, e.g. '68a8a44fd66b224721bea068'.",
+            description="From tl_product offers, e.g. '68a8a44fd66b224721bea068'.",
         ),
     ]
     count: Annotated[int, Field(ge=1, le=20, description="Quantity.")] = 1
-    insured_count: Annotated[int, Field(ge=0, le=20, description="How many of the units get device insurance.")] = 0
+    insured_count: Annotated[int, Field(ge=0, le=20, description="Units with device insurance.")] = 0
     payment: Annotated[
         Literal["cash", "installment", "bnpl"],
-        Field(description="cash, installment (LOAN cluster) or bnpl (buy now pay later)."),
+        Field(description="Price list: cash, installment or bnpl (buy now pay later)."),
     ] = "cash"
 
 
@@ -286,14 +285,13 @@ class BasketItem(BaseModel):
 async def tl_price_basket(
     items: Annotated[
         list[BasketItem],
-        Field(min_length=1, max_length=20, description="Seller items to price, from tl_product offers."),
+        Field(min_length=1, max_length=20, description="From tl_product offers."),
     ],
 ) -> dict[str, Any]:
     """Get the exact total for a set of seller items: discounts, insurance, quantity limits, cash vs installment price.
 
-    Priced as a guest; nothing is saved. max_count is the most units one order may contain;
-    over_max_count means the site refuses that quantity. Each seller_item_id may appear once:
-    compare cash and installment in separate calls.
+    Priced as a guest; nothing is saved. over_max_count means the site refuses that quantity.
+    Each seller_item_id may appear once: price cash and installment in separate calls.
     """
     ids = [i.seller_item_id for i in items]
     if len(set(ids)) < len(ids):

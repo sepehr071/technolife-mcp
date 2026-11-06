@@ -18,15 +18,12 @@ PAGES = {"branches": "55", "shipping": "9", "returns": "8", "payment_methods": "
 async def tl_store_info(
     topic: Annotated[
         Literal["branches", "shipping", "returns", "payment_methods"],
-        Field(
-            description="branches (stores, hours, phones), shipping (methods, costs), returns (7-day guarantee), payment_methods."
-        ),
+        Field(description="branches (stores, hours), shipping (methods, costs), returns, payment_methods."),
     ],
 ) -> dict[str, Any]:
     """Read one of Technolife's info pages as plain text.
 
-    Use for stores, shipping rules per city, returns and payment. Exact shipping cost needs a
-    logged-in address, so quote the rules. For other questions try tl_faq.
+    Exact shipping cost needs a logged-in address: quote the rules. For other questions try tl_faq.
     """
     data = await gql(
         "shop_static_page",
@@ -50,7 +47,7 @@ async def tl_faq(
 ) -> dict[str, Any]:
     """Search Technolife's help-center FAQ and return matching questions with plain-text answers.
 
-    Use for policy questions. Single words match best; an empty list means try another word or tl_store_info.
+    Single words match best; an empty list means try another word or tl_store_info.
     """
     data = await gql(
         "shop_customer",
@@ -73,8 +70,7 @@ async def tl_shop_reviews(
 ) -> dict[str, Any]:
     """Read customer reviews of the Technolife shop itself (service, delivery), newest first, rating 1-5, with staff replies.
 
-    Use to judge the shop rather than a product (for a product use tl_reviews). Dates are
-    Jalali; the newest reviews on the site may be a few years old.
+    For a product use tl_reviews. Dates are Jalali; the newest may be a few years old.
     """
     data = await gql(
         "comment",
@@ -111,7 +107,7 @@ async def tl_find_location(
 ) -> dict[str, Any]:
     """Turn an address or landmark into coordinates with its province and city.
 
-    Use to find an address's city (shipping depends on it, see tl_store_info topic=shipping) or the nearest branch.
+    Shipping depends on the city (tl_store_info topic=shipping).
     """
     body = await fetch(f"{BASE}/map_forward", {"search_text": query})
     _check_map(body)
@@ -141,7 +137,7 @@ async def tl_reverse_geocode(
 ) -> dict[str, Any]:
     """Describe coordinates as an address with province, city and neighbourhood.
 
-    Use to confirm a delivery point or get the city for shipping rules.
+    Use to get the city for shipping rules.
     """
     body = await fetch(f"{BASE}/map_reverse", {"location": f"{long},{lat}"})  # lng,lat order
     _check_map(body)
@@ -182,7 +178,7 @@ class _Text(HTMLParser):
         self.parts.append(data)
 
 
-FullText = Annotated[bool, Field(description="Return review and reply text uncut (default cuts at 400 characters).")]
+FullText = Annotated[bool, Field(description="Return review and reply text uncut (default cuts at 400 chars).")]
 
 
 def clip(text: str | None, limit: int = 400, full: bool = False) -> str | None:

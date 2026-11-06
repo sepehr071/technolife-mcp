@@ -40,7 +40,7 @@ TIMED_SECTIONS = {"ProductTechnoOffBanner", "SpecialEventCarousel", "SpecialCaro
 async def tl_deals(
     sort: Annotated[
         Literal["biggest_percent", "biggest_discount_toman", "cheapest", "best_selling", "newest"],
-        Field(description="Order; biggest_percent re-sorts a page of the largest Toman discounts by percent."),
+        Field(description="biggest_percent re-sorts a page of the largest Toman discounts by percent."),
     ] = "biggest_percent",
     min_discount_pct: Annotated[int, Field(ge=0, le=99, description="Only deals with at least this percent off.")] = 0,
     page: Page = 0,
@@ -48,10 +48,9 @@ async def tl_deals(
 ) -> dict[str, Any]:
     """List current in-stock discounts (Technolife's main deal list, تکنوآف) and, on page 0, the timed home-page deals (تکنو تایم).
 
-    Use for "best deals right now". deal_ends is UTC. total is the whole deal list, before
-    min_discount_pct. With biggest_percent or min_discount_pct each page scans the next 100 deals
-    and returns the best `limit`; more_on_page counts matches cut off (raise limit). For one
-    category use tl_category_products with sort=biggest_discount_toman.
+    deal_ends is UTC. total is the whole list, before min_discount_pct. With biggest_percent or
+    min_discount_pct each page scans 100 deals and returns the best `limit`; more_on_page counts
+    matches cut off. For one category use tl_category_products with sort=biggest_discount_toman.
     """
     ordering = ORDERING["biggest_discount_toman" if sort == "biggest_percent" else sort]
     # biggest_percent: the API only orders by Toman amount, so take a wide page and re-sort it.
@@ -112,7 +111,7 @@ async def tl_campaigns(
         str | None,
         Field(
             pattern=r"^[A-Za-z0-9_-]{2,60}$",
-            description="Campaign landing code from this tool's list, e.g. 'payday-technolife'. Omit to list current campaigns.",
+            description="Landing code from this tool's list, e.g. 'payday-technolife'. Omit to list campaigns.",
         ),
     ] = None,
     products_per_section: Annotated[
@@ -121,10 +120,8 @@ async def tl_campaigns(
 ) -> dict[str, Any]:
     """List current campaigns, or show one campaign's sections and products.
 
-    - Without code: campaign landings (code) and promotion pages (page_url) from the home page.
-    - With code: the campaign's carousels with a few products each, and its links.
-    Pass a page_url to tl_category_products to list all its products (products_in_carousel
-    counts only the carousel).
+    Without code: campaign landings (code) and promotion pages (page_url). With code: its
+    carousels with a few products each. Pass a page_url to tl_category_products for all products.
     """
     if code is None:
         data = await gql("shop_landing", HOME, ttl=CACHE_TTL)
@@ -163,12 +160,12 @@ async def tl_seller(
         str,
         Field(
             pattern=r"^(TLS-)?\d{1,9}$",
-            description="Seller code from tl_product offers, e.g. 'TLS-15172' (bare number works).",
+            description="Code from tl_product offers, e.g. 'TLS-15172' (bare number works).",
         ),
     ],
     sort: Annotated[
         Literal["best_selling", "cheapest", "most_expensive", "newest", "biggest_discount_toman"],
-        Field(description="Order of the seller's products."),
+        Field(description="Product order."),
     ] = "best_selling",
     in_stock: Annotated[bool, Field(description="Only orderable products.")] = True,
     page: Page = 0,
@@ -176,7 +173,7 @@ async def tl_seller(
 ) -> dict[str, Any]:
     """Get a marketplace seller's reputation (rating 0-5, on-time %, fault-free %, time on Technolife) and its products.
 
-    Use to judge a seller found in tl_product offers before recommending its offer.
+    Use to judge a seller from tl_product offers.
     """
     flt: dict[str, Any] = {"limit": limit, "skip": page, "ordering": ORDERING[sort]}
     if in_stock:
