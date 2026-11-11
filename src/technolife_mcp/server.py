@@ -1,5 +1,6 @@
 """MCP server entry point: registers every read-only Technolife tool."""
 
+import asyncio
 import functools
 import inspect
 import json
@@ -10,7 +11,12 @@ from mcp.server import MCPServer
 from mcp.types import ToolAnnotations
 
 from . import __version__, catalog, info, offers, product, search  # noqa: F401  (imports register the tools)
+from .http import ApiError
 from .registry import TOOLS
+
+# Seconds one tool call may take, retries included: hosts like the mcpfarsi router cut a call at 20 s, and a clear
+# error before that beats a hang.
+DEADLINE = 15
 
 INSTRUCTIONS = """\
 Unofficial, read-only access to Technolife (technolife.com), an Iranian electronics retailer and
@@ -47,11 +53,18 @@ mcp = MCPServer(
 
 
 def compact(fn):
-    """Return the tool result as one compact JSON text block (the SDK default sends it twice, indented)."""
+    """Return the tool result as one compact JSON text block (the SDK default sends it twice, indented).
+
+    The call fails with ApiError once it runs past DEADLINE.
+    """
 
     @functools.wraps(fn)
     async def run(*args, **kwargs):
-        return json.dumps(await fn(*args, **kwargs), ensure_ascii=False, separators=(",", ":"))
+        try:
+            result = await asyncio.wait_for(fn(*args, **kwargs), DEADLINE)
+        except asyncio.TimeoutError:
+            raise ApiError(f"www.technolife.com did not answer within {DEADLINE} s. Try again in a moment.") from None
+        return json.dumps(result, ensure_ascii=False, separators=(",", ":"))
 
     return run
 

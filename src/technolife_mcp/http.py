@@ -114,7 +114,7 @@ def _next_proxy(client: httpx.AsyncClient) -> None:
 
 
 async def _close_later(client: httpx.AsyncClient) -> None:
-    await asyncio.sleep(30)  # longer than the 30 s request timeout
+    await asyncio.sleep(30)  # longer than any request (the tool DEADLINE is 15 s)
     await client.aclose()
 
 
@@ -135,7 +135,8 @@ def _get_client() -> tuple[httpx.AsyncClient, asyncio.Semaphore]:
                 max_connections=2 * MAX_CONCURRENCY,
             ),
             headers=HEADERS,
-            timeout=30,
+            # Answers take 0.3-8 s; a hung one ends early enough to be retried within the tool DEADLINE (15 s).
+            timeout=httpx.Timeout(10, connect=5),
             limits=httpx.Limits(max_connections=2 * MAX_CONCURRENCY),
             follow_redirects=True,
             trust_env=False,

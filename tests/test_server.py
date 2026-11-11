@@ -1,9 +1,12 @@
+import asyncio
 import json
 
 import pytest
 from conftest import fixture
 from mcp import Client
 
+from technolife_mcp import server
+from technolife_mcp.http import ApiError
 from technolife_mcp.info import clip
 from technolife_mcp.offers import _link
 from technolife_mcp.server import mcp
@@ -46,3 +49,13 @@ async def test_nav_tree_is_cached(client, api):
     for _ in range(2):
         await client.call_tool("tl_categories", {})
     assert len(api.calls) == 1
+
+
+async def test_call_past_deadline_fails_with_clear_error(monkeypatch):
+    monkeypatch.setattr(server, "DEADLINE", 0.05)
+
+    async def hang():
+        await asyncio.sleep(5)
+
+    with pytest.raises(ApiError, match="did not answer within 0.05 s"):
+        await server.compact(hang)()
