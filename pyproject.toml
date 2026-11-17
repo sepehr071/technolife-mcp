@@ -1,9 +1,9 @@
 [project]
 name = "technolife-mcp"
-version = "0.5.1"
+version = "0.5.2"
 description = "Unofficial read-only MCP server for Technolife: search electronics, compare sellers and installment prices, find deals."
 readme = "README.md"
-license = "MIT"
+license = "PolyForm-Noncommercial-1.0.0"
 license-files = ["LICENSE"]
 authors = [{ name = "Sepehr Radmard", email = "sepehrr80@gmail.com" }]
 requires-python = ">=3.10"

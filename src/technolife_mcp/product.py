@@ -18,7 +18,7 @@ ProductCode = Annotated[
     str,
     Field(
         pattern=r"^(TLP-)?\d{1,9}$",
-        description="Product code, e.g. 'TLP-60492' (bare number works).",
+        description="Argument is `product_code` (not `code`): the `code` of a tl_search result, e.g. 'TLP-60492' (bare number works).",
     ),
 ]
 
