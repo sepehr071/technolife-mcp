@@ -20,7 +20,7 @@ search phones, laptops and appliances, compare every seller's cash and installme
 [![Install in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=technolife&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJ0ZWNobm9saWZlLW1jcCJdfQ==)
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_technolife--mcp-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=technolife&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22technolife-mcp%22%5D%7D)
 
-[For AI agents](#for-ai-agents) · [Why](#why) · [What it can do](#what-it-can-do) · [Quick start](#quick-start) · [Tools](#tools) · [How it works](#how-it-works) · [Good to know](#good-to-know) · [FAQ](#faq) · [Configuration](#configuration) · [فارسی](#فارسی) · [Development](#development) · [Related servers](#related-servers)
+[For AI agents](#for-ai-agents) · [Why](#why) · [What it can do](#what-it-can-do) · [Quick start](#quick-start) · [Tools](#tools) · [Good to know](#good-to-know) · [FAQ](#faq) · [Configuration](#configuration) · [فارسی](#فارسی) · [Development](#development) · [Related servers](#related-servers)
 
 </div>
 
@@ -236,25 +236,6 @@ seller, color and price list.
 </details>
 
 All 19 tools are annotated `readOnlyHint: true` and return compact JSON, so they don't flood the agent's context.
-
-## How it works
-
-```text
-  AI agent  (Claude, Cursor, Copilot, ...)
-      │
-      │  MCP over stdio
-      ▼
-  technolife-mcp  (runs on your machine)
-      │
-      │  HTTPS (GraphQL)
-      └──────▶  www.technolife.com
-```
-
-`technolife-mcp` runs locally and calls the same public GraphQL endpoints the technolife.com website uses.
-There's no hosted server in between, no API key, and nothing about you is sent anywhere else.
-Technolife sits behind Cloudflare, so requests go out through a Chrome-impersonating HTTP client. It sends at most 2
-requests at a time with a little jitter, caches the category tree and home-page data for 5 minutes, and retries a
-timeout, network error, 429 or 5xx up to twice. It only sends GraphQL `query` operations, never `mutation`.
 
 ## Good to know
 
